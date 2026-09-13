@@ -243,7 +243,8 @@
 /* testimonials */
 .rs-testimonials { background: linear-gradient(rgba(0,0,0,.6), rgba(0,0,0,.6)), url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1800&q=80') center/cover fixed; color: #fff; padding: 100px 5vw 90px; text-align: center; }
 .rs-testimonials h2 { font-size: clamp(24px, 3vw, 32px); font-weight: 700; margin: 0 0 45px; }
-.rs-testimonial-box { animation: rs-fade-in .5s ease both; display: flex; gap: 34px; margin: 0 auto; max-width: 860px; text-align: left; }
+.rs-testimonial-box { animation: rs-quote-in .5s ease both; display: flex; gap: 34px; margin: 0 auto; max-width: 860px; text-align: left; }
+@keyframes rs-quote-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 .rs-avatar { background: #e6e6e6 url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23bbb'><path d='M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5zm0 2c-4 0-8 2-8 5v2h16v-2c0-3-4-5-8-5z'/></svg>") center/60% no-repeat; border-radius: 4px; flex: 0 0 160px; height: 130px; }
 .rs-quote-icon { color: var(--maroon); }
 .rs-testimonial-box blockquote { margin: 0; }
@@ -284,12 +285,18 @@
   .rs-submit-btn { display: none; }
   .rs-menu-btn { color: var(--maroon); display: block; }
   .rs-social-rail { top: auto; bottom: 90px; }
+  .rs-social-rail a { height: 40px; width: 40px; }
+  .rs-hero { min-height: 420px; }
+  .rs-hero-copy { left: 6vw; max-width: none; transform: none; width: calc(100% - 6vw - 58px); }
+  .rs-hero-copy h1 { font-size: clamp(26px, 7.5vw, 40px); text-align: left; }
+  @keyframes rs-fade-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
   .rs-search-row { gap: 14px; grid-template-columns: 1fr; margin-bottom: 14px; }
   .rs-search-btn { min-width: 0; width: 100%; }
   .rs-project-grid { grid-template-columns: 1fr; }
+  .rs-testimonials { background-attachment: scroll; padding: 70px 6vw; }
   .rs-testimonial-box { flex-direction: column; }
   .rs-avatar { height: 120px; width: 150px; }
-  .rs-cta-strip { align-items: flex-start; flex-direction: column; }
+  .rs-cta-strip { align-items: flex-start; flex-direction: column; padding: 36px 6vw; }
   .rs-footer-grid { grid-template-columns: 1fr; gap: 36px; }
 }
 @media (max-width: 560px) {
