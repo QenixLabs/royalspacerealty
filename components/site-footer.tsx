@@ -15,14 +15,22 @@ export function SiteFooter() {
     <footer className="rs-footer">
       <div className="rs-footer-grid">
         <div>
+          <img
+            className="rs-footer-logo"
+            src="/royalspacerealty_white.png"
+            alt="Royal Space Realty"
+            width={220}
+            height={165}
+          />
           <h4>CONTACT US</h4>
           <p>Get in touch with us</p>
           <p>
-            Office No 1, Shatrunjaygiri Building, opp Crescent Horizon, Ashok Nagar, Kandivali East,
-            Mumbai, Maharashtra 400101
+            Shop No 5, Durga Mata Welfare Society, Salve Lane, New Link Road, Kandivali West, Mumbai,
+            Maharashtra 400067
           </p>
-          <p>Email: info@royalspacerealty.com</p>
-          <p>Phone: +91-9870222232</p>
+          <p>Email: royal.space0224@gmail.com</p>
+          <p>Phone: +91 9867915101</p>
+          <p>Maha RERA No. A518000018427</p>
         </div>
         <div>
           <h4>LINKS</h4>

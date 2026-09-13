@@ -29,7 +29,7 @@ export const LinkedinIcon = ({ size = 17 }: IconProps) => (
 )
 
 export const socials = [
-  { icon: MessageCircle, label: 'WhatsApp', href: 'https://wa.me/919870222232' },
+  { icon: MessageCircle, label: 'WhatsApp', href: 'https://wa.me/919867915101' },
   { icon: Calculator, label: 'EMI Calculator', href: '/contact' },
   { icon: FacebookIcon, label: 'Facebook', href: '#' },
   { icon: YoutubeIcon, label: 'YouTube', href: '#' },

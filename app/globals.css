@@ -161,7 +161,7 @@
 }
 
 /* ---- Royal Space Realty (True Space reference style) ---- */
-:root { --maroon: #9f303e; --maroon-dark: #83252f; --dark: #1a1a1a; --grey: #f4f4f4; --text: #444; }
+:root { --maroon: #1a1a1a; --maroon-dark: #000; --dark: #111; --grey: #f4f4f4; --text: #444; }
 .rs-site { background: #fff; color: var(--text); font-family: 'Open Sans', Arial, sans-serif; font-size: 14px; overflow-x: hidden; }
 
 /* top strip */
@@ -170,16 +170,14 @@
 .rs-topbar a:hover { color: #fff; }
 
 /* header */
-.rs-header { align-items: center; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,.08); display: flex; gap: 40px; height: 86px; justify-content: space-between; padding: 0 5vw; position: sticky; top: 0; z-index: 50; }
-.rs-brand { align-items: center; color: var(--maroon); display: flex; gap: 12px; text-decoration: none; }
-.rs-brand-mark { align-items: center; border: 2px solid var(--maroon); border-radius: 50%; display: inline-flex; height: 46px; justify-content: center; width: 46px; }
-.rs-brand-text strong { color: var(--maroon); display: block; font-size: 17px; font-weight: 800; letter-spacing: .04em; line-height: 1.1; }
-.rs-brand-text small { color: #777; display: block; font-size: 11px; font-weight: 600; letter-spacing: .5em; }
+.rs-header { align-items: center; background: var(--dark); box-shadow: 0 2px 10px rgba(0,0,0,.08); display: flex; gap: 40px; height: 104px; justify-content: space-between; padding: 0 5vw; position: sticky; top: 0; z-index: 50; }
+.rs-brand { align-items: center; color: #fff; display: flex; gap: 12px; text-decoration: none; }
+.rs-brand-logo { display: block; height: 88px; object-fit: contain; width: auto; }
 .rs-nav { display: flex; gap: 34px; margin-left: auto; }
-.rs-nav a { color: #222; font-size: 14px; font-weight: 600; text-decoration: none; }
-.rs-nav a:hover { color: var(--maroon); }
-.rs-submit-btn { border: 2px solid var(--maroon); border-radius: 30px; color: var(--maroon); font-size: 13px; font-weight: 700; padding: 10px 26px; text-decoration: none; transition: background .2s ease, color .2s ease; white-space: nowrap; }
-.rs-submit-btn:hover { background: var(--maroon); color: #fff; }
+.rs-nav a { color: #ddd; font-size: 14px; font-weight: 600; text-decoration: none; }
+.rs-nav a:hover { color: #fff; }
+.rs-submit-btn { border: 2px solid #fff; border-radius: 30px; color: #fff; font-size: 13px; font-weight: 700; padding: 10px 26px; text-decoration: none; transition: background .2s ease, color .2s ease; white-space: nowrap; }
+.rs-submit-btn:hover { background: #fff; color: var(--dark); }
 .rs-menu-btn { background: none; border: 0; display: none; }
 
 /* social rail */
@@ -264,6 +262,7 @@
 .rs-footer { background: var(--dark); color: #bbb; }
 .rs-footer-grid { display: grid; gap: 50px; grid-template-columns: 1.3fr 1fr 1.3fr; margin: 0 auto; max-width: 1140px; padding: 70px 5vw 50px; }
 .rs-footer h4 { color: #fff; font-size: 15px; font-weight: 700; letter-spacing: .08em; margin: 0 0 22px; }
+.rs-footer-logo { display: block; height: auto; margin: 0 0 22px; max-width: 220px; width: 100%; }
 .rs-footer p { font-size: 13px; line-height: 1.8; margin: 0 0 10px; }
 .rs-footer a { color: #bbb; display: block; font-size: 13px; margin-bottom: 9px; text-decoration: none; }
 .rs-footer a:hover { color: #fff; }
@@ -278,9 +277,9 @@
 .rs-reveal { opacity: 0; transform: translateY(18px); filter: blur(6px); transition: opacity .55s ease, transform .55s cubic-bezier(.22, 1, .36, 1), filter .55s ease; transition-delay: var(--reveal-delay, 0ms); will-change: opacity, transform; }
 .rs-reveal.rs-in { filter: blur(0); opacity: 1; transform: translateY(0); }
 .rs-nav a { position: relative; }
-.rs-nav a::after { background: var(--maroon); bottom: -6px; content: ''; height: 2px; left: 0; position: absolute; transform: scaleX(0); transform-origin: left; transition: transform .25s ease; width: 100%; }
+.rs-nav a::after { background: #fff; bottom: -6px; content: ''; height: 2px; left: 0; position: absolute; transform: scaleX(0); transform-origin: left; transition: transform .25s ease; width: 100%; }
 .rs-nav a:hover::after, .rs-nav a.active::after { transform: scaleX(1); }
-.rs-nav a.active { color: var(--maroon); }
+.rs-nav a.active { color: #fff; }
 .rs-hero-slide.active { animation: rs-kenburns 7s ease-out forwards; }
 @keyframes rs-kenburns { from { transform: scale(1); } to { transform: scale(1.06); } }
 .rs-card { transition: box-shadow .3s ease, transform .3s ease; }
@@ -304,7 +303,7 @@
 .rs-inner-hero-copy p { color: #eee; font-size: 13px; letter-spacing: .06em; margin: 0; }
 .rs-inner-hero-copy a { color: #fff; text-decoration: none; }
 .rs-inner-hero-copy a:hover { color: #f0c9cf; }
-.rs-inner-hero-copy span { color: var(--maroon); font-weight: 700; margin: 0 8px; }
+.rs-inner-hero-copy span { color: #fff; font-weight: 700; margin: 0 8px; }
 .rs-page-section { margin: 0 auto; max-width: 1140px; padding: 90px 5vw; width: calc(100% - 2vw); }
 .rs-kicker { color: var(--maroon); font-size: 12px; font-weight: 700; letter-spacing: .18em; margin: 0 0 14px; }
 .rs-about-grid { align-items: center; display: grid; gap: 60px; grid-template-columns: 1fr 1fr; }
@@ -377,11 +376,11 @@
 }
 @media (max-width: 800px) {
   .rs-header { height: 72px; }
-  .rs-nav { background: #fff; box-shadow: 0 10px 20px rgba(0,0,0,.08); display: none; flex-direction: column; gap: 0; left: 0; position: absolute; right: 0; top: 72px; }
+  .rs-nav { background: var(--dark); box-shadow: 0 10px 20px rgba(0,0,0,.08); display: none; flex-direction: column; gap: 0; left: 0; position: absolute; right: 0; top: 72px; }
   .rs-nav.rs-nav-open { display: flex; }
-  .rs-nav a { border-top: 1px solid #eee; padding: 15px 6vw; }
+  .rs-nav a { border-top: 1px solid #333; color: #eee; padding: 15px 6vw; }
   .rs-submit-btn { display: none; }
-  .rs-menu-btn { color: var(--maroon); display: block; }
+  .rs-menu-btn { color: #fff; display: block; }
   .rs-social-rail { top: auto; bottom: 90px; }
   .rs-social-rail a { height: 40px; width: 40px; }
   .rs-hero { min-height: 420px; }

@@ -8,7 +8,7 @@ import ContactForm from '@/components/contact-form'
 
 export const metadata: Metadata = {
   title: 'Contact Us | Royal Space Realty',
-  description: 'Get in touch with Royal Space Realty — real estate consultant in Kandivali East, Mumbai.',
+  description: 'Get in touch with Royal Space Realty — real estate consultant in Kandivali West, Mumbai.',
 }
 
 export default function ContactPage() {
@@ -26,14 +26,14 @@ export default function ContactPage() {
           <Reveal>
             <div className="rs-contact-info">
               <h2>Get In Touch</h2>
-              <p>Drop your details and our team will call you back within a few hours.</p>
+              <p>Drop your details and Manoj Suryavanshi will call you back within a few hours.</p>
               <div className="rs-contact-item">
                 <MapPin size={20} />
                 <div>
                   <strong>Office</strong>
                   <p>
-                    Office No 1, Shatrunjaygiri Building, opp Crescent Horizon, Ashok Nagar, Kandivali East,
-                    Mumbai, Maharashtra 400101
+                    Shop No 5, Durga Mata Welfare Society, Salve Lane, New Link Road, Kandivali West, Mumbai,
+                    Maharashtra 400067
                   </p>
                 </div>
               </div>
@@ -41,14 +41,21 @@ export default function ContactPage() {
                 <Phone size={20} />
                 <div>
                   <strong>Phone</strong>
-                  <p>+91-9870222232</p>
+                  <p>+91 9867915101</p>
                 </div>
               </div>
               <div className="rs-contact-item">
                 <Mail size={20} />
                 <div>
                   <strong>Email</strong>
-                  <p>info@royalspacerealty.com</p>
+                  <p>royal.space0224@gmail.com</p>
+                </div>
+              </div>
+              <div className="rs-contact-item">
+                <Clock size={20} />
+                <div>
+                  <strong>Maha RERA No.</strong>
+                  <p>A518000018427</p>
                 </div>
               </div>
               <div className="rs-contact-item">

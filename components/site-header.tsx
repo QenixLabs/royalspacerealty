@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Home, Mail, Menu, MessageCircle, Phone, X } from 'lucide-react'
+import { Mail, Menu, MessageCircle, Phone, X } from 'lucide-react'
 import { socials } from './socials'
 
 const navLinks = [
@@ -21,26 +21,26 @@ export function SiteHeader() {
   return (
     <>
       <div className="rs-topbar">
-        <a href="https://wa.me/919870222232" target="_blank" rel="noreferrer">
+        <a href="https://wa.me/919867915101" target="_blank" rel="noreferrer">
           <MessageCircle size={14} /> Chat With Us
         </a>
-        <a href="tel:+919870222232">
-          <Phone size={14} /> +91-9870222232
+        <a href="tel:+919867915101">
+          <Phone size={14} /> +91 9867915101
         </a>
-        <a href="mailto:info@royalspacerealty.com">
-          <Mail size={14} /> info@royalspacerealty.com
+        <a href="mailto:royal.space0224@gmail.com">
+          <Mail size={14} /> royal.space0224@gmail.com
         </a>
       </div>
 
       <header className="rs-header">
         <Link className="rs-brand" href="/" aria-label="Royal Space Realty home">
-          <span className="rs-brand-mark">
-            <Home size={20} strokeWidth={1.8} />
-          </span>
-          <span className="rs-brand-text">
-            <strong>ROYAL SPACE</strong>
-            <small>REALTY</small>
-          </span>
+          <img
+            className="rs-brand-logo"
+            src="/royalspacerealty_white.png"
+            alt="Royal Space Realty"
+            width={190}
+            height={149}
+          />
         </Link>
         <nav className={menuOpen ? 'rs-nav rs-nav-open' : 'rs-nav'} aria-label="Primary navigation">
           {navLinks.map((link) => (
