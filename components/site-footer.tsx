@@ -28,7 +28,7 @@ export function SiteFooter() {
             Shop No 5, Durga Mata Welfare Society, Salve Lane, New Link Road, Kandivali West, Mumbai,
             Maharashtra 400067
           </p>
-          <p>Email: royal.space0224@gmail.com</p>
+          <p>Email: manoj@royalspacerealty.in</p>
           <p>Phone: +91 9867915101</p>
           <p>Maha RERA No. A518000018427</p>
         </div>

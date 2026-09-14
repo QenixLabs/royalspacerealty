@@ -27,8 +27,8 @@ export function SiteHeader() {
         <a href="tel:+919867915101">
           <Phone size={14} /> +91 9867915101
         </a>
-        <a href="mailto:royal.space0224@gmail.com">
-          <Mail size={14} /> royal.space0224@gmail.com
+        <a href="mailto:manoj@royalspacerealty.in">
+          <Mail size={14} /> manoj@royalspacerealty.in
         </a>
       </div>
 

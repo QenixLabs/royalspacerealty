@@ -48,7 +48,7 @@ export default function ContactPage() {
                 <Mail size={20} />
                 <div>
                   <strong>Email</strong>
-                  <p>royal.space0224@gmail.com</p>
+                  <p>manoj@royalspacerealty.in</p>
                 </div>
               </div>
               <div className="rs-contact-item">
