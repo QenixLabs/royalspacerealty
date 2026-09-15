@@ -1,14 +1,24 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Mail, Menu, MessageCircle, Phone, X } from 'lucide-react'
+import { ChevronDown, Mail, Menu, MessageCircle, Phone, X } from 'lucide-react'
 import { socials } from './socials'
 
-const navLinks = [
+type NavChild = { href: string; label: string }
+type NavLink = { href: string; label: string; children?: NavChild[] }
+
+const navLinks: NavLink[] = [
   { href: '/', label: 'Home' },
-  { href: '/about', label: 'About Us' },
+  {
+    href: '/about',
+    label: 'About Us',
+    children: [
+      { href: '/about', label: 'About Us' },
+      { href: '/founders-message', label: "Founder's Message" },
+    ],
+  },
   { href: '/projects', label: 'Projects' },
   { href: '/services', label: 'Services' },
   { href: '/contact', label: 'Contact Us' },
@@ -16,7 +26,33 @@ const navLinks = [
 
 export function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false)
+  const [dropOpen, setDropOpen] = useState(false)
   const pathname = usePathname()
+  const dropRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    setMenuOpen(false)
+    setDropOpen(false)
+  }, [pathname])
+
+  useEffect(() => {
+    if (!dropOpen) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setDropOpen(false)
+    }
+    const onClick = (e: MouseEvent) => {
+      if (dropRef.current && !dropRef.current.contains(e.target as Node)) setDropOpen(false)
+    }
+    window.addEventListener('keydown', onKey)
+    window.addEventListener('mousedown', onClick)
+    return () => {
+      window.removeEventListener('keydown', onKey)
+      window.removeEventListener('mousedown', onClick)
+    }
+  }, [dropOpen])
+
+  const isActive = (link: NavLink) =>
+    link.children ? link.children.some((c) => c.href === pathname) : pathname === link.href
 
   return (
     <>
@@ -43,16 +79,51 @@ export function SiteHeader() {
           />
         </Link>
         <nav className={menuOpen ? 'rs-nav rs-nav-open' : 'rs-nav'} aria-label="Primary navigation">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={pathname === link.href ? 'active' : ''}
-              onClick={() => setMenuOpen(false)}
-            >
-              {link.label}
-            </Link>
-          ))}
+          {navLinks.map((link) =>
+            link.children ? (
+              <div
+                key={link.label}
+                className="rs-nav-item"
+                ref={dropRef}
+              >
+                <button
+                  type="button"
+                  className={`rs-nav-parent ${isActive(link) ? 'active' : ''}`}
+                  aria-expanded={dropOpen}
+                  aria-haspopup="true"
+                  onClick={() => setDropOpen((v) => !v)}
+                >
+                  {link.label}
+                  <ChevronDown size={14} aria-hidden="true" className={dropOpen ? 'is-open' : ''} />
+                </button>
+                <div className={dropOpen ? 'rs-nav-drop rs-nav-drop-open' : 'rs-nav-drop'} role="menu">
+                  {link.children.map((child) => (
+                    <Link
+                      key={child.href}
+                      href={child.href}
+                      role="menuitem"
+                      className={pathname === child.href ? 'active' : ''}
+                      onClick={() => {
+                        setDropOpen(false)
+                        setMenuOpen(false)
+                      }}
+                    >
+                      {child.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={pathname === link.href ? 'active' : ''}
+                onClick={() => setMenuOpen(false)}
+              >
+                {link.label}
+              </Link>
+            ),
+          )}
         </nav>
         <Link className="rs-submit-btn" href="/contact">Submit Property</Link>
         <button

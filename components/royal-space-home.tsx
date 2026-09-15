@@ -197,7 +197,7 @@ export function RoyalSpaceHome() {
           {featuredProjects.map((project, index) => (
             <Reveal key={project.name} delay={(index % 3) * 90}>
               <article className="rs-card">
-                <div className="rs-card-img" style={{ backgroundImage: `url(${project.image})` }}>
+                <div className="rs-card-img" style={{ backgroundImage: `url(${project.image})` }} role="img" aria-label={project.name}>
                   <span className="rs-card-tag">FEATURED</span>
                   <span className="rs-card-price">{project.price}</span>
                 </div>
@@ -217,7 +217,7 @@ export function RoyalSpaceHome() {
                     </div>
                   </div>
                 </div>
-                <Link href="/projects" className="rs-card-btn">SEE DETAILS</Link>
+                <Link href={`/projects/${project.slug}`} className="rs-card-btn">SEE DETAILS</Link>
               </article>
             </Reveal>
           ))}

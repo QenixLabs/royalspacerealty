@@ -1,0 +1,483 @@
+export type PropertyConfig = {
+  bhk: string
+  area: string
+  price?: string
+}
+
+export type Property = {
+  slug: string
+  name: string
+  builder: string
+  location: string
+  address: string
+  rera?: string
+  status: string
+  possession?: string
+  tagline?: string
+  overview: string[]
+  configurations: PropertyConfig[]
+  amenities: string[]
+  connectivity: string[]
+  priceDisplay: string
+  areaDisplay: string
+  bhkDisplay: string
+  category: 'Residential' | 'Commercial'
+  mapUrl?: string
+  imageCount: number
+}
+
+const img = (slug: string, count: number) =>
+  Array.from({ length: count }, (_, i) => `/properties/${slug}/${String(i + 1).padStart(2, '0')}.jpg`)
+
+export const properties: Property[] = [
+  {
+    slug: 'ocean-breeze',
+    name: 'Ocean Breeze',
+    builder: 'Bhairav Smile Infraprojects',
+    location: 'Charkop, Kandivali West',
+    address: 'Plot No. 810, Near K.B. Patil International School, Charkop, Sector-8, Kandivali West, Mumbai',
+    rera: 'P51800053078',
+    status: 'Under Construction — 13th slab completed, 14th in progress',
+    tagline: 'Luxury meets authenticity — Vastu-compliant, pagoda-facing flats with a double-height grand lobby.',
+    overview: [
+      'Premium G+23 storey residential tower by Bhairav Smile Infraprojects at the heart of Charkop, Kandivali West.',
+      'Vastu-compliant, pagoda-facing flats with a double-heighted grand entrance lobby and automated car parking tower.',
+      'Built with Mivan construction technology for superior finish and faster delivery. Sample flats ready for 1 BHK and 2 BHK.',
+    ],
+    configurations: [
+      { bhk: '1 BHK', area: '423 sq.ft.' },
+      { bhk: '2 BHK', area: '561 – 661 sq.ft.' },
+      { bhk: '3 BHK', area: '930 sq.ft.' },
+    ],
+    amenities: [
+      'Swimming Pool', 'Banquet Hall', 'Kids Play Area', 'Yoga Deck',
+      'Screening Area', 'Well-equipped Gymnasium', 'Entertainment Zone', 'Jogging & Walking Track',
+    ],
+    connectivity: [
+      'Kandivali Metro Station — 10 mins',
+      'Kandivali Railway Station — 20 mins',
+      'Upcoming Coastal Road — 270 m from project',
+    ],
+    priceDisplay: 'On Request',
+    areaDisplay: '423 – 930 Sq.Ft.',
+    bhkDisplay: '1, 2, 3',
+    category: 'Residential',
+    imageCount: 8,
+  },
+  {
+    slug: 'gold-crest',
+    name: 'Gold Crest',
+    builder: 'Shraddha Prime Projects Ltd',
+    location: 'Bhanu Park, Kandivali West',
+    address: 'Adukia Rd, Bhanu Park, Kandivali West, Near Kandivali Railway Station, Mumbai',
+    status: 'Ready to Move — limited inventory',
+    tagline: 'BSE-listed developer with 15+ years, 9.2 Mn sq.ft delivered and 5000+ satisfied customers.',
+    overview: [
+      'Gold Crest by Shraddha Prime Projects Ltd — a BSE-listed real estate company with expertise of more than 15 years.',
+      'The group has delivered 9.2 million sq.ft across 20 projects with 5000+ satisfied customers.',
+      'Stone’s throw from Kandivali Railway Station — walk-to-station living with luxurious amenities.',
+    ],
+    configurations: [
+      { bhk: '1 BHK', area: '487 sq.ft.', price: '₹1.78 Cr all-in' },
+      { bhk: '2 BHK', area: '598 sq.ft.', price: '₹2.15 Cr all-in' },
+      { bhk: '2 BHK', area: '627 sq.ft.', price: '₹2.25 Cr all-in' },
+    ],
+    amenities: [
+      'Temple', 'Lavish Gym', 'Podium Parking', 'Jogging Track',
+      '24×7 Security', 'Vastu-Compliant Flats', 'Senior Citizens Area',
+    ],
+    connectivity: [
+      'Kandivali Railway Station — 1 min',
+      'S.V. Road — 1 min',
+      'Western Express Highway — 5 mins',
+      'School — 3 mins | Hospital — 5 mins | Bank — 2 mins | College — 5 mins',
+    ],
+    priceDisplay: '₹1.78 – ₹2.25 Cr',
+    areaDisplay: '487 – 627 Sq.Ft.',
+    bhkDisplay: '1, 2',
+    category: 'Residential',
+    mapUrl: 'https://maps.app.goo.gl/rYNiQUXfJXEfWm7h6',
+    imageCount: 8,
+  },
+  {
+    slug: 'rashmi-manorath',
+    name: 'Rashmi Manorath',
+    builder: 'Modi Navnirman',
+    location: 'Borivali West',
+    address: 'Borivali West, Mumbai (1 min from Borivali Station)',
+    status: 'Under Construction — 13th slab completed, Full CC received',
+    possession: 'March 2027',
+    tagline: 'Where life comes together — 1 & 2 BHK smart homes with jodi options.',
+    overview: [
+      'Rashmi Manorath by Modi Navnirman — a G+18 storey tower rising at Borivali West.',
+      '13th slab completed; full CC received. Easy & flexible 30:30:30:10 payment plan.',
+      '1-minute walk from Borivali Station — unmatched rail connectivity for daily commuters.',
+    ],
+    configurations: [
+      { bhk: '1 BHK', area: '428 sq.ft.' },
+      { bhk: '2 BHK', area: '612 sq.ft.' },
+      { bhk: 'Jodi Options', area: 'Available on request' },
+    ],
+    amenities: ['Indoor Games Zone', 'Multipurpose Area with BBQ'],
+    connectivity: [
+      'Borivali Station — 1 min walk',
+      'Metro & W.E.H — 3 mins',
+      'East-West Flyover — 3 mins',
+    ],
+    priceDisplay: 'On Request',
+    areaDisplay: '428 – 612 Sq.Ft.',
+    bhkDisplay: '1, 2',
+    category: 'Residential',
+    mapUrl: 'https://maps.app.goo.gl/HDL27GWDPQ5oSyKh6',
+    imageCount: 8,
+  },
+  {
+    slug: 'nakshatra-heights',
+    name: 'DPS Nakshatra Heights',
+    builder: 'DPS Group',
+    location: 'Sector 2, Charkop, Kandivali West',
+    address: 'Sector 2, Charkop, Kandivali West, Mumbai',
+    status: 'New Launch',
+    tagline: '21-storey premium luxury tower with podium ramp car parking and lifetime no-obstruction views.',
+    overview: [
+      'Premium luxury 21-storey residential tower with lavishly designed 1, 2 & 3 BHK apartments.',
+      'A & B wings with Ground + 3-level podium and 20 residential floors — no tower parking, no lift parking, only podium ramp car parking.',
+      'Grand entrance lobby of ~2000 sq.ft with 14-ft height. Life-time no-obstruction clear view.',
+    ],
+    configurations: [
+      { bhk: '1 BHK', area: '441 sq.ft.', price: '₹1.35 Cr all-in' },
+      { bhk: '2 BHK', area: '609 sq.ft.', price: '₹1.70 Cr all-in' },
+      { bhk: '3 BHK', area: '763 sq.ft.', price: '₹2.10 Cr all-in' },
+      { bhk: '3 BHK', area: '782 sq.ft.', price: '₹2.33 Cr all-in' },
+      { bhk: '3 BHK (Balcony)', area: '829 sq.ft.', price: '₹2.46 Cr all-in' },
+      { bhk: '3 BHK (Balcony)', area: '843 sq.ft.', price: '₹2.50 Cr all-in' },
+      { bhk: '3 BHK (Balcony)', area: '852 sq.ft.', price: '₹2.53 Cr all-in' },
+    ],
+    amenities: [
+      'Grand 2000 sq.ft Entrance Lobby (14 ft height)',
+      'Gym & Club House', 'Indoor Games', 'Terrace Garden',
+    ],
+    connectivity: ['Charkop Sector 2 — heart of Kandivali West'],
+    priceDisplay: '₹1.35 – ₹2.53 Cr',
+    areaDisplay: '441 – 852 Sq.Ft.',
+    bhkDisplay: '1, 2, 3',
+    category: 'Residential',
+    imageCount: 5,
+  },
+  {
+    slug: 'hum-gs-heights',
+    name: 'HUM GS Heights',
+    builder: 'HUM Developers',
+    location: 'Sector 5, Charkop, Kandivali West',
+    address: 'Sector 5, Charkop, Kandivali West, Mumbai - 400067',
+    rera: 'PM1180002502424',
+    status: 'Under Construction — 11% dues collected',
+    possession: 'Builder commitment 2029 (RERA 2031)',
+    tagline: 'The Divine Living — 21+ world-class amenities across a G+23 storey tower.',
+    overview: [
+      'HUM GS Heights by HUM Developers — a refined lifestyle in the heart of Kandivali West.',
+      'G+23 storey single tower with two wings (A & B), 2-way ramp podium parking from 1st to 4th floor, residences from 5th to 23rd.',
+      '1982 sq.m land parcel; ground level commercial for daily convenience.',
+    ],
+    configurations: [
+      { bhk: '1 BHK (A Wing)', area: '410 sq.ft. carpet', price: '₹1.12 Cr' },
+      { bhk: '2 BHK (A Wing)', area: '610 sq.ft. carpet', price: '₹1.76 Cr all-in' },
+      { bhk: '2 BHK (A Wing)', area: '611 sq.ft. carpet', price: '₹1.76 Cr all-in' },
+      { bhk: '3 BHK (A Wing)', area: '956 sq.ft. carpet', price: '₹2.69 Cr all-in' },
+      { bhk: '1 BHK (B Wing)', area: '442 sq.ft. carpet', price: '₹1.20 Cr' },
+      { bhk: '1 BHK (B Wing)', area: '453 sq.ft. carpet', price: '₹1.23 Cr' },
+      { bhk: '2 BHK (B Wing)', area: '816 sq.ft. carpet', price: '₹2.32 Cr' },
+    ],
+    amenities: [
+      'Indoor Games', 'Library', 'Senior Citizen Area', 'Open Theatre',
+      'Rock Climbing', 'Jogging Track', 'Reflexology Zone', 'Swing Seating', 'Lawn', '+ 12 more',
+    ],
+    connectivity: [
+      'Schools — 2 mins', 'Colleges — 10 mins', 'Metro Station — 5 mins',
+      'Jain Derasar — 2 mins', 'Market — 1 min', 'Hospitals — 2 mins', 'Link Road — 5 mins',
+    ],
+    priceDisplay: '₹1.12 – ₹2.69 Cr',
+    areaDisplay: '410 – 956 Sq.Ft.',
+    bhkDisplay: '1, 2, 3',
+    category: 'Residential',
+    mapUrl: 'https://maps.app.goo.gl/wLaeajdWNZe2cUc28',
+    imageCount: 8,
+  },
+  {
+    slug: 'jaswanti-jewel',
+    name: 'Jaswanti Jewel',
+    builder: 'Ashray Group',
+    location: 'Off M.G. Road, Kandivali West',
+    address: 'Chhatrapati Shivaji Road, Off M.G. Road, Kandivali West, Mumbai - 400067',
+    rera: 'P51800048817',
+    status: 'Under Construction',
+    tagline: 'An ultra-luxurious 37-storey premium tower — club-life & sky-life indulgences 390 ft above ground.',
+    overview: [
+      'Jaswanti Jewel by Ashray Group — creators of Kandivali’s finest addresses — a G+37 storey single tower in a premium zone.',
+      'Vastu-compliant premium homes with decks, magnificent landscaped pathway, grand lobby, automated car-parking tower.',
+      'Club House & Sky-life indulgences 390 ft above ground — infinity pool, jacuzzi, mini theatre and more.',
+    ],
+    configurations: [
+      { bhk: '2 BHK', area: '728 sq.ft.' },
+      { bhk: '3 BHK', area: '1006 sq.ft.' },
+      { bhk: '4 & 5 BHK', area: 'Jodi options available' },
+    ],
+    amenities: [
+      'Club House 390 ft up', 'Gym & Yoga Studio', 'Spa, Salon & Steam Room', 'Mini Theatre',
+      'Indoor Games', 'Infinity Pool with Party Deck', 'Jacuzzi', 'Barbeque Corner', 'Zen Garden', 'Senior Citizen Area',
+    ],
+    connectivity: [
+      'Dhanukarwadi Metro Station — 5 mins',
+      'Kandivali Railway Station — 12 mins',
+      'Western Express Highway — 15 mins',
+      'Mumbai International Airport — 25 mins',
+    ],
+    priceDisplay: 'On Request',
+    areaDisplay: '728 – 1006 Sq.Ft.',
+    bhkDisplay: '2, 3, 4, 5',
+    category: 'Residential',
+    mapUrl: 'https://goo.gl/maps/jnffrdGxLR6qzGxPA',
+    imageCount: 8,
+  },
+  {
+    slug: 'shree-ascend-towers',
+    name: 'Shree Ascend Towers',
+    builder: 'Shree Group',
+    location: 'Chincholi Bunder Road, Malad West',
+    address: 'Next to Dheeraj Solitaire, Chincholi Bunder Road, Malad West, Mumbai',
+    rera: 'P51800049273',
+    status: 'Under Construction — construction in full swing, Full CC received',
+    possession: 'Nearing possession',
+    tagline: 'Where luxury, Vastu and value converge — 40% open space at ground level.',
+    overview: [
+      'Ground + 21 storeys with 2 levels of podium ramp parking at Malad West.',
+      'Unique highlight — 40% open space at ground level for a peaceful, spacious living environment rarely found in the area.',
+      'Special 50-50 payment plan: pay in 2 easy stages, no heavy upfront burden. Approved by all leading banks.',
+    ],
+    configurations: [
+      { bhk: '1 BHK', area: '380 sq.ft. carpet', price: '₹1.07 Cr++' },
+      { bhk: '1 BHK', area: '394 sq.ft. carpet', price: '₹1.10 Cr++' },
+      { bhk: '1 BHK', area: '398 sq.ft. carpet', price: '₹1.11 Cr++' },
+      { bhk: '1 BHK', area: '400 sq.ft. carpet', price: '₹1.12 Cr++' },
+      { bhk: '1 BHK', area: '407 sq.ft. carpet', price: '₹1.22 Cr++' },
+      { bhk: '1 BHK', area: '411 sq.ft. carpet', price: '₹1.23 Cr++' },
+      { bhk: '1 BHK', area: '412 sq.ft. carpet', price: '₹1.23 Cr++' },
+      { bhk: '1 BHK', area: '420 sq.ft. carpet', price: '₹1.25 Cr++' },
+      { bhk: '2 BHK', area: '591 sq.ft. carpet', price: '₹1.73 Cr++' },
+      { bhk: '2.5 BHK', area: '691 sq.ft. carpet', price: '₹1.91 Cr++' },
+      { bhk: '3 BHK', area: '732 sq.ft. carpet', price: '₹2.13 Cr++' },
+    ],
+    amenities: [
+      'Fully Equipped Gym', 'Private Mini Theater', 'Yoga & Meditation Zone',
+      'Landscaped Gardens & Green Walkways', 'Rooftop Party Deck', 'Star Gazing Lounge',
+    ],
+    connectivity: [
+      'Link Road — 400 m', 'Metro Station — 300 m', 'Railway Station — 1.3 km',
+    ],
+    priceDisplay: '₹1.07 – ₹2.13 Cr',
+    areaDisplay: '380 – 732 Sq.Ft.',
+    bhkDisplay: '1, 2, 2.5, 3',
+    category: 'Residential',
+    imageCount: 8,
+  },
+  {
+    slug: 'tsaaya',
+    name: 'TSAAYA',
+    builder: 'Sambhav Group',
+    location: 'Kandivali East',
+    address: 'Corner of Akurli Road & Ashok Chakravarti Road, Kandivali East, Mumbai',
+    rera: 'P51800046545',
+    status: 'Nearing Possession — RCC work completed',
+    tagline: 'A landmark address — zero kilometres from railway & metro, Jain temple within the premises.',
+    overview: [
+      'TSAAYA by Sambhav Group — 2, 3 & 4 BHK balcony homes at a landmark Kandivali East address.',
+      'Zero kilometres from railway station & metro; excellent connectivity to Infinity IT Park, Mindspace, NESCO and more.',
+      'Trusted by over 880+ families. Jain temple within the premises. All prices negotiable — limited inventory.',
+    ],
+    configurations: [
+      { bhk: '1 BHK', area: '453 sq.ft.', price: '₹1.26 Cr++' },
+      { bhk: '1 BHK', area: '515 sq.ft.', price: '₹1.54 Cr++' },
+      { bhk: '1.5 BHK', area: '575 sq.ft.', price: '₹1.61 Cr++' },
+      { bhk: '1.5 BHK', area: '601 sq.ft.', price: '₹1.80 Cr++' },
+      { bhk: '2 BHK', area: '636 sq.ft.', price: '₹2.02 Cr++' },
+      { bhk: '3 BHK', area: '815 sq.ft.', price: '₹2.43 Cr++' },
+      { bhk: '3 BHK', area: '902 sq.ft.', price: '₹2.70 Cr++' },
+      { bhk: '3 BHK', area: '1011 sq.ft.', price: '₹3.24 Cr++' },
+      { bhk: '4 BHK', area: '1198 sq.ft.', price: '₹3.59 Cr++' },
+      { bhk: '4 BHK', area: '1267 sq.ft.', price: '₹4.05 Cr++' },
+    ],
+    amenities: [
+      'Fully Equipped Gymnasium', 'Swimming Pool (Podium Level)', 'Society Office',
+      'Terrace Garden & Sit-Outs', 'Tower Parking', 'Jain Temple within Premises',
+    ],
+    connectivity: [
+      'Railway Station & Metro — 0 km',
+      'Infinity IT Park, Mindspace, NESCO hubs nearby',
+      'Seamless access to Malad, Goregaon, Borivali & Dahisar',
+    ],
+    priceDisplay: '₹1.26 – ₹4.05 Cr',
+    areaDisplay: '453 – 1267 Sq.Ft.',
+    bhkDisplay: '1, 1.5, 2, 3, 4',
+    category: 'Residential',
+    imageCount: 5,
+  },
+  {
+    slug: 'empire-fairmont',
+    name: 'Empire Fairmont',
+    builder: 'Empire Group',
+    location: 'I.C. Colony, Borivali West',
+    address: 'I.C. Colony, Borivali West, Mumbai',
+    status: 'Nearing Possession — possession in 6-7 months',
+    tagline: 'Luxury homes crafted for modern living — limited luxury residences available.',
+    overview: [
+      'Empire Fairmont brings a perfect blend of luxury, comfort and convenience in the heart of I.C. Colony, Borivali West.',
+      'Possession in just 6 to 7 months — superior construction & premium specifications.',
+      'Pricing from ₹27,000 per sq.ft onwards across thoughtfully sized carpet areas.',
+    ],
+    configurations: [
+      { bhk: 'Residence', area: '601 sq.ft.' },
+      { bhk: 'Residence', area: '605 sq.ft.' },
+      { bhk: 'Residence', area: '607 sq.ft.' },
+      { bhk: 'Residence', area: '655 sq.ft.' },
+    ],
+    amenities: [
+      'Rooftop Sitting Area', 'Digital Library', 'Multipurpose Lawn',
+      'Yoga & Meditation Deck', 'Senior Citizen Wing', 'Fully Equipped Gym', 'Cafeteria',
+    ],
+    connectivity: [
+      'Prime I.C. Colony address — Borivali West',
+      'Daily essentials & city hotspots within minutes',
+    ],
+    priceDisplay: '₹27,000 / sq.ft. onwards',
+    areaDisplay: '601 – 655 Sq.Ft.',
+    bhkDisplay: '1, 2',
+    category: 'Residential',
+    imageCount: 8,
+  },
+  {
+    slug: 'rajgruha',
+    name: 'Rajgruha',
+    builder: 'Rajgruha Group',
+    location: 'Kandivali West',
+    address: 'Kandivali West, Mumbai',
+    status: 'Ready — few flats available',
+    tagline: 'Premium 2 & 3 BHK residences on high floors — only a few flats remaining.',
+    overview: [
+      'Premium 2 BHK & 3 BHK homes available on high floors with clear views.',
+      'Modern amenities, prime connectivity and a premium lifestyle address.',
+      'Only a few flats available — contact us for a site visit and the best deal.',
+    ],
+    configurations: [
+      { bhk: '2 BHK — 14th Floor', area: '780 sq.ft. carpet', price: '₹2.24 Cr all-in' },
+      { bhk: '3 BHK — 15th Floor', area: '833 sq.ft. carpet', price: '₹2.39 Cr all-in' },
+      { bhk: '3 BHK — 21st Floor', area: '919 sq.ft. carpet', price: '₹2.63 Cr all-in' },
+      { bhk: '3 BHK — 20th Floor', area: '976 sq.ft. carpet', price: '₹2.79 Cr all-in' },
+    ],
+    amenities: ['Modern Amenities', 'Prime Connectivity', 'Premium Lifestyle'],
+    connectivity: ['Kandivali West — prime address'],
+    priceDisplay: '₹2.24 – ₹2.79 Cr',
+    areaDisplay: '780 – 976 Sq.Ft.',
+    bhkDisplay: '2, 3',
+    category: 'Residential',
+    imageCount: 7,
+  },
+  {
+    slug: 'shreeji-eternity',
+    name: 'Shreeji Eternity',
+    builder: 'Shreeji Group',
+    location: 'Link Road, Malad West',
+    address: 'Sales Lounge, Ground Floor, Near Zenith Hospital, Link Road, Mith Chowki Junction, Malad West, Mumbai - 400064',
+    rera: 'P51800054310 / P51800054233',
+    status: 'Under Construction',
+    tagline: 'Redefining elegance at Link Road — 40+ amenities across 4 towers.',
+    overview: [
+      'Shreeji Eternity — an attractive prime location redefining elegance at Link Road, Malad West.',
+      '4 towers: A, B & C are 20 storeys, Tower D is 38 storeys — Ground + 1 commercial, 3-level podium parking and 5 podium amenities.',
+      'Spacious 2 & 3 BHK residences with decks and sky views — eternal, infinite, inclusive living.',
+    ],
+    configurations: [
+      { bhk: '3 BHK Palatial', area: '1205 sq.ft.' },
+      { bhk: '3 BHK Palatial', area: '1217 sq.ft.' },
+    ],
+    amenities: [
+      'Fully Equipped Gym', 'Garden Area', 'Kids Play Area', 'Indoor Games',
+      'Senior Citizen Area', 'Meditation Corner', 'Jogging Track', 'Multipurpose Turf',
+      'Stargazing Area', '+ 30 more',
+    ],
+    connectivity: ['Link Road — Mith Chowki Junction, Malad West', 'Near Zenith Hospital'],
+    priceDisplay: 'On Request',
+    areaDisplay: '1205 – 1217 Sq.Ft.',
+    bhkDisplay: '2, 3',
+    category: 'Residential',
+    mapUrl: 'https://maps.app.goo.gl/KkXfmrSL6q5z3ePm7',
+    imageCount: 8,
+  },
+  {
+    slug: 'np-harmony',
+    name: 'NP Harmony',
+    builder: 'NP Group',
+    location: 'Borivali West',
+    address: 'Behind Vazira Ganesh Temple, Borivali West, Mumbai',
+    status: 'RCC Completed — nearing possession',
+    possession: 'December 2026',
+    tagline: 'Live life like a Royal Family — 7-storey luxurious towers, Vastu-compliant flats.',
+    overview: [
+      'NP Group presents 7-storey luxurious towers at Borivali West with Vastu-compliant residences.',
+      'RCC completed — possession December 2026. Metro station 3 mins walking distance.',
+      'Choice of 1, 2 & 3 BHK residences sized for modern families.',
+    ],
+    configurations: [
+      { bhk: '1 BHK', area: '388 sq.ft.' },
+      { bhk: '1 BHK', area: '439 sq.ft.' },
+      { bhk: '2 BHK', area: '587 sq.ft.' },
+      { bhk: '2 BHK', area: '624 sq.ft.' },
+      { bhk: '2 BHK', area: '627 sq.ft.' },
+      { bhk: '3 BHK', area: '760 sq.ft.' },
+      { bhk: '3 BHK', area: '919 sq.ft.' },
+    ],
+    amenities: ['Vastu-Compliant Flats'],
+    connectivity: [
+      'Metro station — 3 mins walk', 'Derasar & Temple — 2 mins',
+      'Railway station — 10 mins', 'School, College & Hospital — within 10 mins',
+    ],
+    priceDisplay: 'On Request',
+    areaDisplay: '388 – 919 Sq.Ft.',
+    bhkDisplay: '1, 2, 3',
+    category: 'Residential',
+    mapUrl: 'https://maps.app.goo.gl/4sk625mkVHYvCRA78',
+    imageCount: 2,
+  },
+  {
+    slug: 'sukoon',
+    name: 'Code Name: Sukoon',
+    builder: 'NP Group',
+    location: 'Borivali West',
+    address: 'Borivali West, Mumbai (Railway station 1.5 km)',
+    status: 'New Launch',
+    tagline: 'A home that gives you peace, pride & a premium lifestyle — 15-storey elegant residential tower.',
+    overview: [
+      'Code Name: Sukoon — thoughtfully designed for those who seek elegance, convenience and serenity in one perfect address.',
+      'G + 1 commercial spaces for daily convenience; 3-level podium parking; 15-storey elegant residential tower.',
+      'Spacious homes for every dream — fitness, recreation, relaxation and community living amenities.',
+    ],
+    configurations: [
+      { bhk: '1 BHK', price: '₹1.05 Cr onwards' },
+      { bhk: '2 BHK', price: '₹1.80 Cr onwards' },
+      { bhk: '3 BHK', price: '₹2.45 Cr onwards' },
+    ],
+    amenities: ['Fitness', 'Recreation', 'Relaxation', 'Community Living'],
+    connectivity: [
+      'Railway Station — 1.5 km',
+      'Excellent connectivity to daily essentials & city hotspots',
+    ],
+    priceDisplay: '₹1.05 – ₹2.45 Cr',
+    areaDisplay: 'On Request',
+    bhkDisplay: '1, 2, 3',
+    category: 'Residential',
+    imageCount: 7,
+  },
+]
+
+export const getProperty = (slug: string) => properties.find((p) => p.slug === slug)
+
+export const propertyImages = (p: Property) => img(p.slug, p.imageCount)

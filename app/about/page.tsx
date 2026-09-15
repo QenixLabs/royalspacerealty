@@ -40,18 +40,27 @@ export default function AboutPage() {
         <div className="rs-about-grid">
           <Reveal>
             <div>
-              <p className="rs-kicker">WHO WE ARE</p>
-              <h2>Real Estate Consultancy You Can Trust</h2>
+              <p className="rs-kicker">WELCOME TO ROYAL SPACE REALTY</p>
+              <h2>The Real Estate People</h2>
               <p>
-                Royal Space Realty is a Mumbai-based real estate consultancy helping families and businesses
-                find the right space — residential apartments, luxury homes and commercial offices. Being
-                associated with the reputed names of the real estate industry, we take pride in providing
-                elite services to our customers.
+                Manoj Suryavanshi is one of the leading Real Estate consultants. Established in 2014 by
+                Mr. Manoj Suryavanshi, who has an experience of more than 12 years in this field, we have
+                come a long way in the property dealing business — and as the market knows, we are purely
+                &lsquo;The Real Estate People.&rsquo;
               </p>
               <p>
-                From the first site visit to the final registration, our team stays personally involved at
-                every step, so the process feels clear, calm and honest.
+                We serve to buy, rent and sell property — be it residential, commercial or industrial. We
+                look into second homes as well, and are channel partners with many reputed builders &amp;
+                developers.
               </p>
+              <p>
+                We try to use the latest technologies along with our Indian values and morals, as we
+                totally understand that a client&rsquo;s emotions are always involved in the properties
+                they buy. Our motive is to keep clients stress-free and away from all the frantic legal
+                work and documentation — so we provide not only the desired properties but also look after
+                their legal work and documentation.
+              </p>
+              <p>At the end of it all, we desire a satisfied and content client.</p>
             </div>
           </Reveal>
           <Reveal delay={120}>
