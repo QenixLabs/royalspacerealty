@@ -50,7 +50,13 @@ export function SiteFooter() {
           </p>
           <div className="rs-footer-social">
             {socials.map((social) => (
-              <a key={social.label} href={social.href} aria-label={social.label}>
+              <a
+                key={social.label}
+                href={social.href}
+                aria-label={social.label}
+                target={social.href.startsWith('http') ? '_blank' : undefined}
+                rel={social.href.startsWith('http') ? 'noreferrer' : undefined}
+              >
                 <social.icon size={15} />
               </a>
             ))}

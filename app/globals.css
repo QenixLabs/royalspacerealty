@@ -497,6 +497,7 @@
   height: 100%;
   object-fit: cover;
   object-position: center top;
+  transform: scaleX(-1);
   width: 100%;
 }
 .rs-founder-letter { padding: clamp(28px, 5vw, 56px); }

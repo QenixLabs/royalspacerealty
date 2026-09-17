@@ -1,7 +1,8 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
+import { useSearchParams } from 'next/navigation'
 import { MapPin, RotateCcw, SearchX } from 'lucide-react'
 import type { Project } from '@/lib/projects'
 
@@ -19,9 +20,15 @@ const BUDGETS = [
 ]
 
 export function ProjectExplorer({ projects }: ProjectExplorerProps) {
-  const [location, setLocation] = useState('')
+  const searchParams = useSearchParams()
+  const locationParam = searchParams.get('location') ?? ''
+  const [location, setLocation] = useState(locationParam)
   const [bhk, setBhk] = useState('')
   const [budget, setBudget] = useState('')
+
+  useEffect(() => {
+    setLocation(locationParam)
+  }, [locationParam])
 
   const locations = useMemo(
     () => [...new Set(projects.map((p) => p.location))].sort(),
@@ -35,7 +42,7 @@ export function ProjectExplorer({ projects }: ProjectExplorerProps) {
   const filtered = useMemo(
     () =>
       projects.filter((p) => {
-        if (location && p.location !== location) return false
+        if (location && !p.location.toLowerCase().includes(location.toLowerCase())) return false
         if (bhk && !p.bhks.includes(parseFloat(bhk))) return false
         if (budget) {
           const cap = parseFloat(budget)
@@ -62,6 +69,9 @@ export function ProjectExplorer({ projects }: ProjectExplorerProps) {
           <span>Location</span>
           <select value={location} onChange={(e) => setLocation(e.target.value)}>
             <option value="">All Locations</option>
+            {location && !locations.includes(location) && (
+              <option value={location}>Projects in {location}</option>
+            )}
             {locations.map((l) => (
               <option key={l} value={l}>{l}</option>
             ))}

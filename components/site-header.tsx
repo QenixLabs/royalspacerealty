@@ -19,29 +19,51 @@ const navLinks: NavLink[] = [
       { href: '/founders-message', label: "Founder's Message" },
     ],
   },
-  { href: '/projects', label: 'Projects' },
+  {
+    href: '/projects',
+    label: 'Projects',
+    children: [
+      { href: '/projects', label: 'All Projects' },
+      { href: '/projects?location=Kandivali', label: 'Projects In Kandivali' },
+      { href: '/projects?location=Borivali', label: 'Projects In Borivali' },
+      { href: '/projects?location=Malad', label: 'Projects In Malad' },
+      { href: '/projects?location=Goregaon', label: 'Projects In Goregaon' },
+    ],
+  },
   { href: '/services', label: 'Services' },
   { href: '/contact', label: 'Contact Us' },
 ]
 
 export function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false)
-  const [dropOpen, setDropOpen] = useState(false)
+  const [openDrop, setOpenDrop] = useState<string | null>(null)
+  const [query, setQuery] = useState('')
   const pathname = usePathname()
-  const dropRef = useRef<HTMLDivElement>(null)
+  const dropRefs = useRef<Map<string, HTMLDivElement | null>>(new Map())
 
   useEffect(() => {
-    setMenuOpen(false)
-    setDropOpen(false)
+    setQuery(typeof window !== 'undefined' ? window.location.search : '')
   }, [pathname])
 
   useEffect(() => {
-    if (!dropOpen) return
+    const onPop = () => setQuery(window.location.search)
+    window.addEventListener('popstate', onPop)
+    return () => window.removeEventListener('popstate', onPop)
+  }, [])
+
+  useEffect(() => {
+    setMenuOpen(false)
+    setOpenDrop(null)
+  }, [pathname])
+
+  useEffect(() => {
+    if (!openDrop) return
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setDropOpen(false)
+      if (e.key === 'Escape') setOpenDrop(null)
     }
     const onClick = (e: MouseEvent) => {
-      if (dropRef.current && !dropRef.current.contains(e.target as Node)) setDropOpen(false)
+      const el = dropRefs.current.get(openDrop)
+      if (el && !el.contains(e.target as Node)) setOpenDrop(null)
     }
     window.addEventListener('keydown', onKey)
     window.addEventListener('mousedown', onClick)
@@ -49,15 +71,29 @@ export function SiteHeader() {
       window.removeEventListener('keydown', onKey)
       window.removeEventListener('mousedown', onClick)
     }
-  }, [dropOpen])
+  }, [openDrop])
 
-  const isActive = (link: NavLink) =>
-    link.children ? link.children.some((c) => c.href === pathname) : pathname === link.href
+  const isActive = (link: NavLink) => {
+    if (link.children) {
+      return link.children.some((c) => {
+        const base = c.href.split('?')[0]
+        return pathname === base
+      })
+    }
+    return pathname === link.href
+  }
+
+  const isChildActive = (childHref: string) => {
+    const current = pathname + query
+    if (current === childHref) return true
+    if (childHref === '/projects' && pathname === '/projects' && !query.includes('location=')) return true
+    return false
+  }
 
   return (
     <>
       <div className="rs-topbar">
-        <a href="https://wa.me/919867915101" target="_blank" rel="noreferrer">
+        <a href="https://wa.link/b9joi2" target="_blank" rel="noreferrer">
           <MessageCircle size={14} /> Chat With Us
         </a>
         <a href="tel:+919867915101">
@@ -84,28 +120,32 @@ export function SiteHeader() {
               <div
                 key={link.label}
                 className="rs-nav-item"
-                ref={dropRef}
+                ref={(el) => {
+                  dropRefs.current.set(link.label, el)
+                }}
               >
                 <button
                   type="button"
                   className={`rs-nav-parent ${isActive(link) ? 'active' : ''}`}
-                  aria-expanded={dropOpen}
+                  aria-expanded={openDrop === link.label}
                   aria-haspopup="true"
-                  onClick={() => setDropOpen((v) => !v)}
+                  onClick={() => setOpenDrop((v) => (v === link.label ? null : link.label))}
                 >
                   {link.label}
-                  <ChevronDown size={14} aria-hidden="true" className={dropOpen ? 'is-open' : ''} />
+                  <ChevronDown size={14} aria-hidden="true" className={openDrop === link.label ? 'is-open' : ''} />
                 </button>
-                <div className={dropOpen ? 'rs-nav-drop rs-nav-drop-open' : 'rs-nav-drop'} role="menu">
+                <div className={openDrop === link.label ? 'rs-nav-drop rs-nav-drop-open' : 'rs-nav-drop'} role="menu">
                   {link.children.map((child) => (
                     <Link
-                      key={child.href}
+                      key={child.href + child.label}
                       href={child.href}
                       role="menuitem"
-                      className={pathname === child.href ? 'active' : ''}
+                      className={isChildActive(child.href) ? 'active' : ''}
                       onClick={() => {
-                        setDropOpen(false)
+                        setOpenDrop(null)
                         setMenuOpen(false)
+                        const q = child.href.includes('?') ? child.href.slice(child.href.indexOf('?')) : ''
+                        setQuery(q)
                       }}
                     >
                       {child.label}

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { Suspense } from 'react'
 import SiteHeader from '@/components/site-header'
 import SiteFooter, { CtaStrip } from '@/components/site-footer'
 import InnerHero from '@/components/inner-hero'
@@ -26,7 +27,9 @@ export default function ProjectsPage() {
           <h2 className="rs-section-title">FEATURED PROJECTS</h2>
         </Reveal>
         <Reveal delay={60}>
-          <ProjectExplorer projects={projects} />
+          <Suspense fallback={null}>
+            <ProjectExplorer projects={projects} />
+          </Suspense>
         </Reveal>
       </section>
 
