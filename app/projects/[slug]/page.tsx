@@ -10,7 +10,6 @@ import {
   Check,
   Landmark,
   MapPin,
-  Phone,
   Ruler,
   ShieldCheck,
   TrainFront,
@@ -19,6 +18,7 @@ import SiteHeader from '@/components/site-header'
 import SiteFooter, { CtaStrip } from '@/components/site-footer'
 import Reveal from '@/components/reveal'
 import PropertyGallery from '@/components/property-gallery'
+import PropertyEnquire from '@/components/property-enquire'
 import { getProperty, properties, propertyImages } from '@/lib/properties'
 
 type PageProps = { params: Promise<{ slug: string }> }
@@ -181,9 +181,7 @@ export default async function PropertyDetailPage({ params }: PageProps) {
                     <Landmark size={15} aria-hidden="true" /> View on Google Maps
                   </a>
                 )}
-                <Link href="/contact" className="rs-aside-cta">
-                  <Phone size={15} aria-hidden="true" /> Enquire Now
-                </Link>
+                <PropertyEnquire slug={property.slug} name={property.name} />
               </div>
             </Reveal>
           </aside>
