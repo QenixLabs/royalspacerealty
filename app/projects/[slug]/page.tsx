@@ -10,7 +10,6 @@ import {
   Check,
   Landmark,
   MapPin,
-  Phone,
   Ruler,
   ShieldCheck,
   TrainFront,
@@ -19,17 +18,16 @@ import SiteHeader from '@/components/site-header'
 import SiteFooter, { CtaStrip } from '@/components/site-footer'
 import Reveal from '@/components/reveal'
 import PropertyGallery from '@/components/property-gallery'
-import { getProperty, properties, propertyImages } from '@/lib/properties'
+import PropertyEnquire from '@/components/property-enquire'
+import { getPropertyDB, listPropertiesDB } from '@/lib/properties-db'
+
+export const dynamic = 'force-dynamic'
 
 type PageProps = { params: Promise<{ slug: string }> }
 
-export function generateStaticParams() {
-  return properties.map((p) => ({ slug: p.slug }))
-}
-
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params
-  const property = getProperty(slug)
+  const property = await getPropertyDB(slug)
   if (!property) return { title: 'Property Not Found | Royal Space Realty' }
   return {
     title: `${property.name} — ${property.location} | Royal Space Realty`,
@@ -41,13 +39,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function PropertyDetailPage({ params }: PageProps) {
   const { slug } = await params
-  const property = getProperty(slug)
+  const property = await getPropertyDB(slug)
   if (!property) notFound()
 
-  const images = propertyImages(property)
-  const idx = properties.findIndex((p) => p.slug === slug)
-  const prevProperty = properties[(idx - 1 + properties.length) % properties.length]
-  const nextProperty = properties[(idx + 1) % properties.length]
+  const images = [...(property.images ?? [])]
+    .sort((a, b) => Number(b.cover ?? false) - Number(a.cover ?? false))
+    .map((i) => i.secure_url)
+  const all = await listPropertiesDB()
+  const idx = Math.max(0, all.findIndex((p) => p.slug === slug))
+  const prevProperty = all[(idx - 1 + all.length) % all.length]
+  const nextProperty = all[(idx + 1) % all.length]
 
   const facts = [
     { icon: Building2, label: 'Developer', value: property.builder },
@@ -181,9 +182,7 @@ export default async function PropertyDetailPage({ params }: PageProps) {
                     <Landmark size={15} aria-hidden="true" /> View on Google Maps
                   </a>
                 )}
-                <Link href="/contact" className="rs-aside-cta">
-                  <Phone size={15} aria-hidden="true" /> Enquire Now
-                </Link>
+                <PropertyEnquire slug={property.slug} name={property.name} />
               </div>
             </Reveal>
           </aside>

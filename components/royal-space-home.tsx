@@ -18,9 +18,7 @@ import {
 import Reveal from './reveal'
 import SiteHeader from './site-header'
 import SiteFooter, { CtaStrip } from './site-footer'
-import { projects } from '@/lib/projects'
-
-const featuredProjects = projects.slice(0, 6)
+import type { Project } from '@/lib/projects'
 
 const heroSlides = [
   {
@@ -81,7 +79,7 @@ const testimonials = [
   },
 ]
 
-export function RoyalSpaceHome() {
+export function RoyalSpaceHome({ featuredProjects }: { featuredProjects: Project[] }) {
   const [activeSlide, setActiveSlide] = useState(0)
   const [activeTestimonial, setActiveTestimonial] = useState(0)
 
