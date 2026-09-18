@@ -121,7 +121,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         )}
       </div>
 
-      <main className="w-full max-w-6xl flex-1 p-4 md:p-8">{children}</main>
+      <main className="w-full flex-1 bg-neutral-50">
+        <div className="rs-admin mx-auto w-full max-w-7xl px-4 py-6 sm:px-6">{children}</div>
+      </main>
       <Toaster />
     </div>
   )

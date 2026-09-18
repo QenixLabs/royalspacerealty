@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { Building2, Pencil, Plus, Search, Trash2 } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { buttonVariants } from '@/components/ui/button'
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Skeleton } from '@/components/ui/skeleton'
 import {
@@ -28,6 +28,12 @@ export default function PropertiesAdmin() {
   }
   useEffect(() => { load() }, [])
 
+  // Live search, debounced 300ms
+  useEffect(() => {
+    const t = setTimeout(() => { load(q) }, 300)
+    return () => clearTimeout(t)
+  }, [q])
+
   async function remove(id: string, name: string) {
     if (!confirm(`Delete ${name}? This cannot be undone.`)) return
     await fetch(`/api/admin/properties/${id}`, { method: 'DELETE' })
@@ -35,9 +41,9 @@ export default function PropertiesAdmin() {
   }
 
   return (
-    <Card>
-      <CardHeader className="flex-col gap-4 @[700px]/card-header:flex-row @[700px]/card-header:items-center @[700px]/card-header:justify-between">
-        <CardTitle className="text-xl">Properties</CardTitle>
+    <div className="flex flex-col gap-6">
+      <div className="flex items-center justify-between gap-4">
+        <h1 className="text-2xl font-bold tracking-tight text-neutral-900">Properties</h1>
         <Link
           href="/admin/properties/new"
           className={cn(buttonVariants({ variant: 'default' }), 'text-white')}
@@ -46,15 +52,11 @@ export default function PropertiesAdmin() {
           <Plus aria-hidden="true" />
           New Property
         </Link>
-      </CardHeader>
-      <CardContent className="flex flex-col gap-4">
-        <form
-          role="search"
-          aria-label="Search properties"
-          onSubmit={(e) => { e.preventDefault(); load(q) }}
-          className="flex max-w-md items-center gap-2"
-        >
-          <div className="relative flex-1">
+      </div>
+
+      <Card className="bg-white text-neutral-900 border-neutral-200">
+        <CardContent className="flex flex-col gap-4">
+          <div className="relative max-w-md">
             <Search className="absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
             <Input
               value={q}
@@ -64,84 +66,84 @@ export default function PropertiesAdmin() {
               className="pl-8"
             />
           </div>
-          <button
-            type="submit"
-            className={cn(buttonVariants({ variant: 'outline' }))}
-          >
-            Search
-          </button>
-        </form>
 
-        {!loading && items.length === 0 ? (
-          <div className="flex flex-col items-center gap-3 rounded-lg border border-dashed py-14 text-center">
-            <Building2 className="size-8 text-muted-foreground" aria-hidden="true" />
-            <p className="text-sm text-muted-foreground">
-              {q ? 'No properties match your search.' : 'No properties yet. Create your first one.'}
-            </p>
-          </div>
-        ) : (
-          <div className="overflow-x-auto rounded-lg border">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Location</TableHead>
-                  <TableHead>Price</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {loading ? (
-                  Array.from({ length: 5 }).map((_, i) => (
-                    <TableRow key={i}>
-                      {Array.from({ length: 5 }).map((__, j) => (
-                        <TableCell key={j}><Skeleton className="h-5 w-full max-w-32" /></TableCell>
-                      ))}
-                    </TableRow>
-                  ))
-                ) : (
-                  items.map((p) => (
-                    <TableRow key={p._id}>
-                      <TableCell className="font-medium">{p.name}</TableCell>
-                      <TableCell>{p.location}</TableCell>
-                      <TableCell>{p.priceDisplay}</TableCell>
-                      <TableCell>
-                        <Badge variant={p.status === 'Ready to Move' ? 'secondary' : 'outline'}>{p.status}</Badge>
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <div className="flex justify-end gap-1">
-                          <Link
-                            href={`/admin/properties/${p._id}`}
-                            aria-label={`Edit ${p.name}`}
-                            className={cn(buttonVariants({ variant: 'ghost', size: 'icon-sm' }))}
+          {!loading && items.length === 0 ? (
+            <div className="flex flex-col items-center gap-3 rounded-lg border border-dashed py-14 text-center">
+              <Building2 className="size-8 text-muted-foreground" aria-hidden="true" />
+              <p className="text-sm text-muted-foreground">
+                {q ? 'No properties match your search.' : 'No properties yet. Create your first one.'}
+              </p>
+            </div>
+          ) : (
+            <div className="overflow-x-auto rounded-lg border border-neutral-200">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Name</TableHead>
+                    <TableHead>Location</TableHead>
+                    <TableHead>Price</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead className="w-[1%] whitespace-nowrap text-right">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {loading ? (
+                    Array.from({ length: 5 }).map((_, i) => (
+                      <TableRow key={i}>
+                        {Array.from({ length: 5 }).map((__, j) => (
+                          <TableCell key={j}><Skeleton className="h-5 w-full max-w-32" /></TableCell>
+                        ))}
+                      </TableRow>
+                    ))
+                  ) : (
+                    items.map((p) => (
+                      <TableRow key={p._id}>
+                        <TableCell className="font-medium">{p.name}</TableCell>
+                        <TableCell>{p.location}</TableCell>
+                        <TableCell>{p.priceDisplay}</TableCell>
+                        <TableCell className="max-w-[220px]">
+                          <Badge
+                            variant={p.status === 'Ready to Move' ? 'secondary' : 'outline'}
+                            className="block max-w-full truncate"
+                            title={p.status}
                           >
-                            <Pencil aria-hidden="true" />
-                          </Link>
-                          <button
-                            type="button"
-                            onClick={() => remove(p._id, p.name)}
-                            aria-label={`Delete ${p.name}`}
-                            className={cn(
-                              buttonVariants({ variant: 'ghost', size: 'icon-sm' }),
-                              'text-destructive hover:text-destructive',
-                            )}
-                          >
-                            <Trash2 aria-hidden="true" />
-                          </button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </div>
-        )}
-      </CardContent>
-      <CardFooter>
-        <p className="text-sm text-muted-foreground" aria-live="polite">{items.length} properties</p>
-      </CardFooter>
-    </Card>
+                            {p.status}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="w-[1%] whitespace-nowrap text-right">
+                          <div className="flex justify-end gap-1">
+                            <Link
+                              href={`/admin/properties/${p._id}`}
+                              aria-label={`Edit ${p.name}`}
+                              className={cn(buttonVariants({ variant: 'ghost', size: 'icon-sm' }))}
+                            >
+                              <Pencil aria-hidden="true" />
+                            </Link>
+                            <button
+                              type="button"
+                              onClick={() => remove(p._id, p.name)}
+                              aria-label={`Delete ${p.name}`}
+                              className={cn(
+                                buttonVariants({ variant: 'ghost', size: 'icon-sm' }),
+                                'text-destructive hover:text-destructive',
+                              )}
+                            >
+                              <Trash2 aria-hidden="true" />
+                            </button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  )}
+                </TableBody>
+              </Table>
+            </div>
+          )}
+        </CardContent>
+        <CardFooter className="border-neutral-200">
+          <p className="text-xs text-muted-foreground" aria-live="polite">{items.length} properties</p>
+        </CardFooter>
+      </Card>
+    </div>
   )
 }

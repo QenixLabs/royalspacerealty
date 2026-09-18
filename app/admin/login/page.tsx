@@ -32,7 +32,7 @@ export default function AdminLogin() {
 
   return (
     <main
-      className="grid min-h-dvh place-items-center p-4"
+      className="rs-admin grid min-h-dvh place-items-center p-4"
       style={{ background: 'var(--rs-grad-soft)' }}
       aria-label="Admin login"
     >

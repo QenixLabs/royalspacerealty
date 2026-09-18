@@ -146,7 +146,7 @@ export default function PropertyEditor({ params }: { params: Promise<{ id: strin
           <CardTitle>Basics</CardTitle>
           <CardDescription>Core details shown on the listing card and detail page.</CardDescription>
         </CardHeader>
-        <CardContent className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+        <CardContent className="grid gap-4 sm:grid-cols-2">
           <Field id="f-name" label="Name *" error={err('name')}>
             <Input
               id="f-name"
@@ -209,7 +209,7 @@ export default function PropertyEditor({ params }: { params: Promise<{ id: strin
               </SelectContent>
             </Select>
           </Field>
-          <div className="lg:col-span-2">
+          <div className="sm:col-span-2">
             <Field id="f-overview" label="Overview (one per line)">
               <Textarea id="f-overview" rows={5} value={form.overview} onChange={(e) => set('overview', e.target.value)} />
             </Field>
@@ -277,15 +277,14 @@ export default function PropertyEditor({ params }: { params: Promise<{ id: strin
           <CardDescription>Comma separated list.</CardDescription>
         </CardHeader>
         <CardContent>
-          <Field id="f-amenities" label="Amenities">
-            <Textarea
-              id="f-amenities"
-              value={form.amenities}
-              onChange={(e) => set('amenities', e.target.value)}
-              placeholder="Pool, Gym, Park"
-              rows={3}
-            />
-          </Field>
+          <Textarea
+            id="f-amenities"
+            value={form.amenities}
+            onChange={(e) => set('amenities', e.target.value)}
+            placeholder="Pool, Gym, Park"
+            aria-label="Amenities"
+            rows={3}
+          />
         </CardContent>
       </Card>
 
@@ -299,7 +298,7 @@ export default function PropertyEditor({ params }: { params: Promise<{ id: strin
         </CardContent>
       </Card>
 
-      <div className="sticky bottom-0 -mx-4 border-t bg-background/95 px-4 py-3 backdrop-blur md:-mx-8 md:px-8">
+      <div className="sticky bottom-0 -mx-4 border-t border-neutral-200 bg-white/95 px-4 py-3 backdrop-blur sm:-mx-6 sm:px-6">
         <div className="flex items-center justify-end gap-2">
           <Button type="button" variant="outline" onClick={() => router.push('/admin/properties')}>
             Cancel

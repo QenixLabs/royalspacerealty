@@ -114,19 +114,19 @@ export default function InquiriesAdmin() {
         <Card size="sm">
           <CardHeader>
             <CardDescription>New</CardDescription>
-            <CardTitle className="text-3xl" style={{ color: 'var(--purple-700)' }}>{newCount}</CardTitle>
+            <CardTitle className="text-3xl!" style={{ color: 'var(--purple-700)' }}>{newCount}</CardTitle>
           </CardHeader>
         </Card>
         <Card size="sm">
           <CardHeader>
             <CardDescription>Open</CardDescription>
-            <CardTitle className="text-3xl">{openCount}</CardTitle>
+            <CardTitle className="text-3xl!" style={{ color: 'var(--purple-700)' }}>{openCount}</CardTitle>
           </CardHeader>
         </Card>
         <Card size="sm" className="col-span-2 md:col-span-1">
           <CardHeader>
             <CardDescription>Inbox</CardDescription>
-            <CardTitle className="text-3xl">{items.length}</CardTitle>
+            <CardTitle className="text-3xl!" style={{ color: 'var(--purple-700)' }}>{items.length}</CardTitle>
           </CardHeader>
         </Card>
       </div>
@@ -221,7 +221,7 @@ export default function InquiriesAdmin() {
                     <TableHead>Status</TableHead>
                     <TableHead>Property</TableHead>
                     <TableHead>Date</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
+                    <TableHead className="w-[1%] whitespace-nowrap text-right">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -234,14 +234,18 @@ export default function InquiriesAdmin() {
                         </a>
                       </TableCell>
                       <TableCell>{q.source}</TableCell>
-                      <TableCell>
-                        <Badge variant={q.status === 'contacted' ? 'secondary' : 'outline'} className={statusVariant(q.status)}>
+                      <TableCell className="max-w-[220px]">
+                        <Badge
+                          variant={q.status === 'contacted' ? 'secondary' : 'outline'}
+                          className={cn('block max-w-full truncate', statusVariant(q.status))}
+                          title={q.status}
+                        >
                           {q.status}
                         </Badge>
                       </TableCell>
                       <TableCell>{q.propertySlug ?? '—'}</TableCell>
                       <TableCell>{new Date(q.createdAt).toLocaleDateString()}</TableCell>
-                      <TableCell className="text-right">
+                      <TableCell className="w-[1%] whitespace-nowrap text-right">
                         <Button
                           type="button"
                           variant="outline"
