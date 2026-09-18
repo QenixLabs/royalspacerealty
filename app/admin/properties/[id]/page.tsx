@@ -18,7 +18,7 @@ type Config = { bhk: string; area: string; price?: string }
 type Form = {
   name: string; slug: string; builder: string; location: string; address: string
   status: string; priceDisplay: string; areaDisplay: string; bhkDisplay: string
-  category: string; overview: string; amenities: string
+  category: string; overview: string; amenities: string; featured: boolean
   configs: Config[]; images: Img[]
 }
 
@@ -27,7 +27,7 @@ type FieldErrors = Partial<Record<'name' | 'slug' | 'location', string>>
 const blank: Form = {
   name: '', slug: '', builder: '', location: '', address: '',
   status: 'Ready to Move', priceDisplay: '', areaDisplay: '', bhkDisplay: '',
-  category: 'Residential', overview: '', amenities: '',
+  category: 'Residential', overview: '', amenities: '', featured: false,
   configs: [], images: [],
 }
 
@@ -67,7 +67,7 @@ export default function PropertyEditor({ params }: { params: Promise<{ id: strin
         location: found.location ?? '', address: found.address ?? '',
         status: found.status ?? '', priceDisplay: found.priceDisplay ?? '',
         areaDisplay: found.areaDisplay ?? '', bhkDisplay: found.bhkDisplay ?? '',
-        category: found.category ?? 'Residential',
+        category: found.category ?? 'Residential', featured: !!found.featured,
         overview: Array.isArray(found.overview) ? found.overview.join('\n') : '',
         amenities: Array.isArray(found.amenities) ? found.amenities.join(', ') : '',
         configs: found.configurations ?? [], images: found.images ?? [],
@@ -103,6 +103,7 @@ export default function PropertyEditor({ params }: { params: Promise<{ id: strin
         name: form.name, slug: form.slug, builder: form.builder, location: form.location,
         address: form.address, status: form.status, priceDisplay: form.priceDisplay,
         areaDisplay: form.areaDisplay, bhkDisplay: form.bhkDisplay, category: form.category,
+        featured: form.featured,
         overview: form.overview.split('\n').map((s) => s.trim()).filter(Boolean),
         amenities: form.amenities.split(',').map((s) => s.trim()).filter(Boolean),
         configurations: form.configs, images: form.images,
@@ -209,6 +210,27 @@ export default function PropertyEditor({ params }: { params: Promise<{ id: strin
               </SelectContent>
             </Select>
           </Field>
+          <div className="flex items-center gap-2 pt-1">
+            <button
+              type="button"
+              role="switch"
+              aria-checked={form.featured}
+              aria-label="Featured project"
+              onClick={() => set('featured', !form.featured)}
+              className={cn(
+                'relative h-6 w-11 rounded-full transition-colors',
+                form.featured ? 'bg-purple-700' : 'bg-neutral-300',
+              )}
+            >
+              <span
+                className={cn(
+                  'absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-all',
+                  form.featured ? 'left-[22px]' : 'left-0.5',
+                )}
+              />
+            </button>
+            <Label>Featured project</Label>
+          </div>
           <div className="sm:col-span-2">
             <Field id="f-overview" label="Overview (one per line)">
               <Textarea id="f-overview" rows={5} value={form.overview} onChange={(e) => set('overview', e.target.value)} />

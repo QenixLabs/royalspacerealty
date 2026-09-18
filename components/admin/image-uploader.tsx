@@ -61,7 +61,7 @@ function SortableImageCard({
         className="aspect-[4/3] w-full object-cover"
         loading="lazy"
       />
-      <div className="absolute inset-x-0 top-0 flex justify-end gap-1 bg-gradient-to-b from-black/40 to-transparent p-1.5 opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100">
+      <div className="absolute inset-x-0 top-0 flex items-center justify-end gap-1 bg-gradient-to-b from-black/70 via-black/40 to-transparent p-1.5">
         <Button
           type="button"
           variant="ghost"
@@ -69,7 +69,7 @@ function SortableImageCard({
           onClick={onSetCover}
           aria-label="Set cover"
           aria-pressed={!!img.cover}
-          className={cn('bg-white/80 hover:bg-white', img.cover && 'text-amber-500 hover:text-amber-600')}
+          className={cn('bg-white/90 text-neutral-700 hover:bg-white hover:text-neutral-900', img.cover && 'text-amber-500 hover:text-amber-600')}
         >
           <Star aria-hidden="true" fill={img.cover ? 'currentColor' : 'none'} />
         </Button>
@@ -78,7 +78,7 @@ function SortableImageCard({
           variant="ghost"
           size="icon-xs"
           aria-label="Drag to reorder"
-          className="cursor-grab bg-white/80 hover:bg-white active:cursor-grabbing"
+          className="cursor-grab bg-white/90 text-neutral-700 hover:bg-white hover:text-neutral-900 active:cursor-grabbing"
           {...attributes}
           {...listeners}
         >
@@ -90,13 +90,13 @@ function SortableImageCard({
           size="icon-xs"
           onClick={onRemove}
           aria-label="Remove image"
-          className="bg-white/80 hover:bg-white"
+          className="bg-white/90 text-neutral-700 hover:bg-white hover:text-red-600"
         >
           <X aria-hidden="true" />
         </Button>
       </div>
       {img.cover && (
-        <span className="absolute bottom-1.5 left-1.5 rounded bg-black/60 px-1.5 py-0.5 text-[10px] font-semibold text-white">
+        <span className="absolute bottom-1.5 left-1.5 rounded bg-purple-700 px-1.5 py-0.5 text-[10px] font-semibold text-white">
           Cover
         </span>
       )}

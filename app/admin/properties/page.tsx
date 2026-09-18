@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { Building2, Pencil, Plus, Search, Trash2 } from 'lucide-react'
+import { Building2, Pencil, Plus, Search, Star, Trash2 } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { buttonVariants } from '@/components/ui/button'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/table'
 import { cn } from 'cn'
 
-type Item = { _id: string; slug: string; name: string; location: string; priceDisplay: string; status: string; updatedAt: string }
+type Item = { _id: string; slug: string; name: string; location: string; priceDisplay: string; status: string; featured?: boolean; updatedAt: string }
 
 export default function PropertiesAdmin() {
   const [items, setItems] = useState<Item[]>([])
@@ -98,7 +98,17 @@ export default function PropertiesAdmin() {
                   ) : (
                     items.map((p) => (
                       <TableRow key={p._id}>
-                        <TableCell className="font-medium">{p.name}</TableCell>
+                        <TableCell className="font-medium">
+                          <span className="inline-flex items-center gap-1.5">
+                            {p.name}
+                            {p.featured && (
+                              <Badge className="bg-purple-700 text-white hover:bg-purple-700" title="Featured project">
+                                <Star className="size-3" aria-hidden="true" fill="currentColor" />
+                                Featured
+                              </Badge>
+                            )}
+                          </span>
+                        </TableCell>
                         <TableCell>{p.location}</TableCell>
                         <TableCell>{p.priceDisplay}</TableCell>
                         <TableCell className="max-w-[220px]">
