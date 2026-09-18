@@ -108,7 +108,7 @@ export function SiteHeader() {
         <Link className="rs-brand" href="/" aria-label="Royal Space Realty home">
           <img
             className="rs-brand-logo"
-            src="/royalspacerealty_white.png"
+            src="/royalspacerealty_white_hd.png"
             alt="Royal Space Realty"
             width={190}
             height={149}

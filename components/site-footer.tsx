@@ -17,7 +17,7 @@ export function SiteFooter() {
         <div>
           <img
             className="rs-footer-logo"
-            src="/royalspacerealty_white.png"
+            src="/royalspacerealty_white_hd.png"
             alt="Royal Space Realty"
             width={220}
             height={165}
