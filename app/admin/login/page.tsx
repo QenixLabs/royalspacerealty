@@ -1,7 +1,11 @@
 'use client'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Eye, EyeOff, Lock } from 'lucide-react'
+import { Building2, Eye, EyeOff, Loader2, Lock } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 
 export default function AdminLogin() {
   const router = useRouter()
@@ -27,17 +31,66 @@ export default function AdminLogin() {
   }
 
   return (
-    <main className="rs-site" style={{ minHeight: '100dvh', display: 'grid', placeItems: 'center', background: '#f4f4f4', padding: 20 }}>
-      <form onSubmit={submit} className="rs-contact-form-wrap" style={{ width: 'min(420px,100%)' }} aria-label="Admin login">
-        <h3 style={{ display: 'flex', alignItems: 'center', gap: 8 }}><Lock size={18} aria-hidden="true" /> Admin Login</h3>
-        <label htmlFor="admin-pass" style={{ fontSize: 12, fontWeight: 700 }}>PASSWORD</label>
-        <div style={{ display: 'flex', gap: 8 }}>
-          <input id="admin-pass" type={show ? 'text' : 'password'} required autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Enter admin password" style={{ flex: 1 }} aria-describedby={error ? 'login-error' : undefined} />
-          <button type="button" onClick={() => setShow((s) => !s)} aria-label={show ? 'Hide password' : 'Show password'} style={{ minWidth: 44, minHeight: 44 }}>{show ? <EyeOff size={18} /> : <Eye size={18} />}</button>
-        </div>
-        {error && <p id="login-error" role="alert" style={{ color: '#b91c1c', fontSize: 13 }}>{error}</p>}
-        <button type="submit" disabled={loading}>{loading ? 'SIGNING IN…' : 'SIGN IN'}</button>
-      </form>
+    <main
+      className="grid min-h-dvh place-items-center p-4"
+      style={{ background: 'var(--rs-grad-soft)' }}
+      aria-label="Admin login"
+    >
+      <Card className="w-full max-w-sm">
+        <CardHeader className="items-center text-center">
+          <div
+            className="mb-2 flex size-11 items-center justify-center rounded-xl text-white"
+            style={{ background: 'var(--rs-grad)' }}
+            aria-hidden="true"
+          >
+            <Building2 className="size-5" />
+          </div>
+          <CardTitle className="text-lg">Royal Space · Admin</CardTitle>
+          <CardDescription>Enter the admin password to continue.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={submit} className="flex flex-col gap-4">
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="admin-pass">
+                <Lock className="size-3.5" aria-hidden="true" />
+                Password
+              </Label>
+              <div className="relative">
+                <Input
+                  id="admin-pass"
+                  type={show ? 'text' : 'password'}
+                  required
+                  autoComplete="current-password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Enter admin password"
+                  aria-describedby={error ? 'login-error' : undefined}
+                  className="pr-10"
+                />
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon-sm"
+                  onClick={() => setShow((s) => !s)}
+                  aria-label={show ? 'Hide password' : 'Show password'}
+                  className="absolute top-1/2 right-1 -translate-y-1/2"
+                >
+                  {show ? <EyeOff className="size-4" aria-hidden="true" /> : <Eye className="size-4" aria-hidden="true" />}
+                </Button>
+              </div>
+              {error && (
+                <p id="login-error" role="alert" className="text-sm text-destructive">
+                  {error}
+                </p>
+              )}
+            </div>
+            <Button type="submit" disabled={loading} className="w-full text-white" style={{ background: 'var(--rs-grad)' }}>
+              {loading && <Loader2 className="animate-spin" aria-hidden="true" />}
+              {loading ? 'Signing in…' : 'Sign in'}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
     </main>
   )
 }

@@ -1,6 +1,22 @@
 'use client'
 import { useCallback, useEffect, useState } from 'react'
-import { Inbox, Mail, Phone, RotateCcw, X } from 'lucide-react'
+import { Inbox, Loader2, Mail, Phone, RotateCcw } from 'lucide-react'
+import { Badge } from '@/components/ui/badge'
+import { Button, buttonVariants } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle,
+} from '@/components/ui/dialog'
+import { Label } from '@/components/ui/label'
+import {
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+} from '@/components/ui/select'
+import { Skeleton } from '@/components/ui/skeleton'
+import {
+  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
+} from '@/components/ui/table'
+import { Textarea } from '@/components/ui/textarea'
+import { cn } from 'cn'
 
 type Inquiry = {
   _id: string
@@ -16,11 +32,23 @@ type Inquiry = {
   createdAt: string
 }
 
+const STATUS_OPTS = [
+  { value: 'new', label: 'New' },
+  { value: 'contacted', label: 'Contacted' },
+  { value: 'closed', label: 'Closed' },
+] as const
+
+function statusVariant(status: string) {
+  if (status === 'new') return 'bg-[var(--purple-700)] text-white hover:bg-[var(--purple-700)]'
+  if (status === 'contacted') return ''
+  return 'border-border text-muted-foreground'
+}
+
 export default function InquiriesAdmin() {
   const [items, setItems] = useState<Inquiry[]>([])
   const [newCount, setNewCount] = useState(0)
-  const [status, setStatus] = useState('')
-  const [source, setSource] = useState('')
+  const [status, setStatus] = useState('all')
+  const [source, setSource] = useState('all')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [selected, setSelected] = useState<Inquiry | null>(null)
@@ -33,8 +61,8 @@ export default function InquiriesAdmin() {
     setError('')
     try {
       const sp = new URLSearchParams()
-      if (st) sp.set('status', st)
-      if (src) sp.set('source', src)
+      if (st !== 'all') sp.set('status', st)
+      if (src !== 'all') sp.set('source', src)
       const res = await fetch(`/api/admin/inquiries?${sp.toString()}`)
       const data = await res.json()
       if (!res.ok) throw new Error(data.error ?? 'Failed to load inquiries')
@@ -56,9 +84,9 @@ export default function InquiriesAdmin() {
   }
 
   function resetFilters() {
-    setStatus('')
-    setSource('')
-    load('', '')
+    setStatus('all')
+    setSource('all')
+    load('all', 'all')
   }
 
   async function patch(id: string, body: Record<string, string>) {
@@ -78,144 +106,244 @@ export default function InquiriesAdmin() {
   }
 
   const openCount = items.filter((i) => i.status !== 'closed').length
+  const filtersActive = status !== 'all' || source !== 'all'
 
   return (
-    <div>
-      <style>{`@media (max-width: 767px){.rs-inq-tablewrap{display:none}}.rs-inq-cards{display:grid;gap:10px}@media (min-width: 768px){.rs-inq-cards{display:none}}.rs-inq-card{border:1px solid #e5ddf0;border-radius:8px;padding:12px;background:#fff}.rs-inq-drawer{position:fixed;top:0;right:0;height:100dvh;width:min(420px,100%);background:#fff;box-shadow:-8px 0 30px rgba(0,0,0,.15);z-index:50;overflow-y:auto;padding:20px}.rs-inq-overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:40}.rs-inq-kpis{display:grid;gap:10px;grid-template-columns:repeat(2,1fr);margin-bottom:16px}@media (min-width: 768px){.rs-inq-kpis{grid-template-columns:repeat(3,1fr)}}.rs-inq-kpi{border:1px solid #e5ddf0;border-radius:8px;padding:14px;background:#fff}.rs-inq-kpi strong{font-size:24px;color:#4b1659;display:block}`}</style>
-      <div className="rs-admin-head">
-        <h1>Inquiries</h1>
+    <div className="flex flex-col gap-6">
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-3" aria-label="Inquiry stats">
+        <Card size="sm">
+          <CardHeader>
+            <CardDescription>New</CardDescription>
+            <CardTitle className="text-3xl" style={{ color: 'var(--purple-700)' }}>{newCount}</CardTitle>
+          </CardHeader>
+        </Card>
+        <Card size="sm">
+          <CardHeader>
+            <CardDescription>Open</CardDescription>
+            <CardTitle className="text-3xl">{openCount}</CardTitle>
+          </CardHeader>
+        </Card>
+        <Card size="sm" className="col-span-2 md:col-span-1">
+          <CardHeader>
+            <CardDescription>Inbox</CardDescription>
+            <CardTitle className="text-3xl">{items.length}</CardTitle>
+          </CardHeader>
+        </Card>
       </div>
 
-      <div className="rs-inq-kpis" aria-label="Inquiry stats">
-        <div className="rs-inq-kpi"><span>New</span><strong>{newCount}</strong></div>
-        <div className="rs-inq-kpi"><span>Open</span><strong>{openCount}</strong></div>
-        <div className="rs-inq-kpi"><span>Inbox</span><strong>{items.length}</strong></div>
-      </div>
-
-      <form
-        className="rs-admin-search"
-        role="search"
-        aria-label="Filter inquiries"
-        onSubmit={(e) => { e.preventDefault(); load() }}
-      >
-        <label htmlFor="f-status" className="sr-only" style={{ position: 'absolute', left: -9999 }}>Status</label>
-        <select id="f-status" value={status} onChange={(e) => setStatus(e.target.value)} aria-label="Filter by status" style={{ maxWidth: 180 }}>
-          <option value="">All statuses</option>
-          <option value="new">New</option>
-          <option value="contacted">Contacted</option>
-          <option value="closed">Closed</option>
-        </select>
-        <label htmlFor="f-source" className="sr-only" style={{ position: 'absolute', left: -9999 }}>Source</label>
-        <select id="f-source" value={source} onChange={(e) => setSource(e.target.value)} aria-label="Filter by source" style={{ maxWidth: 200 }}>
-          <option value="">All sources</option>
-          <option value="contact">Contact</option>
-          <option value="property-cta">Property CTA</option>
-        </select>
-        <button type="submit" className="rs-admin-primary">Apply</button>
-        {(status || source) && (
-          <button type="button" onClick={resetFilters} aria-label="Reset filters" style={{ minHeight: 44 }}>
-            <RotateCcw size={16} aria-hidden="true" /> Reset
-          </button>
-        )}
-      </form>
-
-      {loading && <p aria-live="polite">Loading inquiries…</p>}
-
-      {!loading && error && (
-        <div role="alert" style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
-          <p style={{ color: '#b91c1c' }}>{error}</p>
-          <button type="button" onClick={() => load()} className="rs-admin-primary">Retry</button>
-        </div>
-      )}
-
-      {!loading && !error && items.length === 0 && (
-        <div style={{ textAlign: 'center', padding: 32 }}>
-          <Inbox size={32} aria-hidden="true" />
-          <p>No inquiries match these filters.</p>
-          <button type="button" onClick={resetFilters} className="rs-admin-primary">Reset filters</button>
-        </div>
-      )}
-
-      {!loading && !error && items.length > 0 && (
-        <>
-          <div className="rs-admin-tablewrap rs-inq-tablewrap">
-            <table className="rs-admin-table">
-              <thead><tr><th>Name</th><th>Phone</th><th>Source</th><th>Status</th><th>Property</th><th>Date</th><th>Actions</th></tr></thead>
-              <tbody>
-                {items.map((q) => (
-                  <tr key={q._id}>
-                    <td>{q.name}</td>
-                    <td><a href={`tel:${q.phone.replace(/\s/g, '')}`}>{q.phone}</a></td>
-                    <td>{q.source}</td>
-                    <td>{q.status}</td>
-                    <td>{q.propertySlug ?? '—'}</td>
-                    <td>{new Date(q.createdAt).toLocaleDateString()}</td>
-                    <td><button type="button" onClick={() => openDetail(q)} aria-label={`View ${q.name}`}>View</button></td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <div className="rs-inq-cards">
-            {items.map((q) => (
-              <article key={q._id} className="rs-inq-card">
-                <strong>{q.name}</strong>
-                <p style={{ margin: '4px 0', fontSize: 13 }}>{q.status} · {q.source}</p>
-                <p style={{ margin: '4px 0', fontSize: 13 }}><a href={`tel:${q.phone.replace(/\s/g, '')}`}>{q.phone}</a></p>
-                <button type="button" onClick={() => openDetail(q)} aria-label={`View ${q.name}`} style={{ minHeight: 44 }}>View details</button>
-              </article>
-            ))}
-          </div>
-        </>
-      )}
-      <p aria-live="polite">{!loading && !error ? `${items.length} inquiries` : ''}</p>
-
-      {selected && (
-        <>
-          <div className="rs-inq-overlay" onClick={() => setSelected(null)} aria-hidden="true" />
-          <aside className="rs-inq-drawer" role="dialog" aria-modal="true" aria-label={`Inquiry from ${selected.name}`}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <h2 style={{ margin: 0 }}>{selected.name}</h2>
-              <button type="button" onClick={() => setSelected(null)} aria-label="Close details" style={{ minWidth: 44, minHeight: 44 }}><X size={18} /></button>
+      <Card size="sm">
+        <CardContent>
+          <form
+            role="search"
+            aria-label="Filter inquiries"
+            onSubmit={(e) => { e.preventDefault(); load() }}
+            className="flex flex-col gap-3 sm:flex-row sm:items-center"
+          >
+            <Select value={status} onValueChange={(v) => setStatus(v ?? 'all')}>
+              <SelectTrigger id="f-status" className="sm:w-44" aria-label="Filter by status">
+                <SelectValue placeholder="All statuses" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All statuses</SelectItem>
+                {STATUS_OPTS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}
+              </SelectContent>
+            </Select>
+            <Select value={source} onValueChange={(v) => setSource(v ?? 'all')}>
+              <SelectTrigger id="f-source" className="sm:w-48" aria-label="Filter by source">
+                <SelectValue placeholder="All sources" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All sources</SelectItem>
+                <SelectItem value="contact">Contact</SelectItem>
+                <SelectItem value="property-cta">Property CTA</SelectItem>
+              </SelectContent>
+            </Select>
+            <div className="flex items-center gap-2">
+              <Button type="submit" className="text-white" style={{ background: 'var(--rs-grad)' }}>
+                Apply
+              </Button>
+              {filtersActive && (
+                <Button type="button" variant="ghost" onClick={resetFilters} aria-label="Reset filters">
+                  <RotateCcw aria-hidden="true" />
+                  Reset
+                </Button>
+              )}
             </div>
-            <p>
-              <a href={`tel:${selected.phone.replace(/\s/g, '')}`}><Phone size={14} aria-hidden="true" /> {selected.phone}</a>
-            </p>
-            {selected.email && (
-              <p>
-                <a href={`mailto:${selected.email}`}><Mail size={14} aria-hidden="true" /> {selected.email}</a>
-              </p>
-            )}
-            <p style={{ fontSize: 13 }}>Intent: {selected.intent ?? '—'} · Source: {selected.source} · Property: {selected.propertySlug ?? '—'}</p>
-            {selected.message && <p style={{ fontSize: 14 }}>{selected.message}</p>}
-            <label htmlFor="inq-status" style={{ fontSize: 12, fontWeight: 700 }}>STATUS</label>
-            <select
-              id="inq-status"
-              value={editStatus}
-              onChange={(e) => { setEditStatus(e.target.value); patch(selected._id, { status: e.target.value }) }}
-              aria-label="Update status"
-            >
-              <option value="new">New</option>
-              <option value="contacted">Contacted</option>
-              <option value="closed">Closed</option>
-            </select>
-            <label htmlFor="inq-notes" style={{ fontSize: 12, fontWeight: 700, marginTop: 12, display: 'block' }}>NOTES</label>
-            <textarea
-              id="inq-notes"
-              value={editNotes}
-              onChange={(e) => setEditNotes(e.target.value)}
-              placeholder="Internal notes…"
-              aria-label="Inquiry notes"
-            />
-            <div style={{ display: 'flex', gap: 8, marginTop: 10 }}>
-              <button type="button" className="rs-admin-primary" disabled={saving} onClick={() => patch(selected._id, { notes: editNotes })}>
-                {saving ? 'SAVING…' : 'Save notes'}
-              </button>
-              <button type="button" onClick={() => setSelected(null)} style={{ minHeight: 44 }}>Close</button>
+          </form>
+        </CardContent>
+      </Card>
+
+      {loading ? (
+        <Card size="sm">
+          <CardContent className="flex flex-col gap-3">
+            <Skeleton className="h-8 w-full" />
+            <Skeleton className="h-8 w-full" />
+            <Skeleton className="h-8 w-full" />
+            <Skeleton className="h-8 w-full" />
+            <Skeleton className="h-8 w-full" />
+          </CardContent>
+        </Card>
+      ) : error ? (
+        <Card size="sm">
+          <CardContent>
+            <div role="alert" className="flex flex-col items-start gap-3 py-6 sm:flex-row sm:items-center">
+              <p className="text-sm text-destructive">{error}</p>
+              <Button type="button" onClick={() => load()}>
+                Retry
+              </Button>
             </div>
-          </aside>
-        </>
+          </CardContent>
+        </Card>
+      ) : items.length === 0 ? (
+        <Card size="sm">
+          <CardContent>
+            <div className="flex flex-col items-center gap-3 py-10 text-center">
+              <Inbox className="size-8 text-muted-foreground" aria-hidden="true" />
+              <p className="text-sm text-muted-foreground">No inquiries match these filters.</p>
+              {filtersActive && (
+                <Button type="button" variant="outline" onClick={resetFilters}>
+                  Reset filters
+                </Button>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      ) : (
+        <Card size="sm">
+          <CardContent>
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Name</TableHead>
+                    <TableHead>Phone</TableHead>
+                    <TableHead>Source</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Property</TableHead>
+                    <TableHead>Date</TableHead>
+                    <TableHead className="text-right">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {items.map((q) => (
+                    <TableRow key={q._id}>
+                      <TableCell className="font-medium">{q.name}</TableCell>
+                      <TableCell>
+                        <a href={`tel:${q.phone.replace(/\s/g, '')}`} className="underline-offset-3 hover:underline">
+                          {q.phone}
+                        </a>
+                      </TableCell>
+                      <TableCell>{q.source}</TableCell>
+                      <TableCell>
+                        <Badge variant={q.status === 'contacted' ? 'secondary' : 'outline'} className={statusVariant(q.status)}>
+                          {q.status}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>{q.propertySlug ?? '—'}</TableCell>
+                      <TableCell>{new Date(q.createdAt).toLocaleDateString()}</TableCell>
+                      <TableCell className="text-right">
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => openDetail(q)}
+                          aria-label={`View ${q.name}`}
+                        >
+                          View
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </CardContent>
+        </Card>
       )}
+
+      <p className="text-sm text-muted-foreground" aria-live="polite">
+        {!loading && !error ? `${items.length} inquiries` : ''}
+      </p>
+
+      <Dialog open={!!selected} onOpenChange={(open) => { if (!open) setSelected(null) }}>
+        <DialogContent className="max-h-[90dvh] overflow-y-auto sm:max-w-lg">
+          {selected && (
+            <>
+              <DialogHeader>
+                <DialogTitle>{selected.name}</DialogTitle>
+                <DialogDescription>
+                  Intent: {selected.intent ?? '—'} · Source: {selected.source} · Property: {selected.propertySlug ?? '—'}
+                </DialogDescription>
+              </DialogHeader>
+
+              <div className="flex flex-col gap-3">
+                <div className="flex flex-wrap gap-2">
+                  <a
+                    href={`tel:${selected.phone.replace(/\s/g, '')}`}
+                    className={cn(buttonVariants({ variant: 'outline', size: 'sm' }))}
+                  >
+                    <Phone aria-hidden="true" />
+                    {selected.phone}
+                  </a>
+                  {selected.email && (
+                    <a
+                      href={`mailto:${selected.email}`}
+                      className={cn(buttonVariants({ variant: 'outline', size: 'sm' }))}
+                    >
+                      <Mail aria-hidden="true" />
+                      {selected.email}
+                    </a>
+                  )}
+                </div>
+
+                {selected.message && (
+                  <p className="rounded-lg bg-muted p-3 text-sm whitespace-pre-wrap">{selected.message}</p>
+                )}
+
+                <div className="flex flex-col gap-2">
+                  <Label htmlFor="inq-status">Status</Label>
+                  <Select
+                    value={editStatus}
+                    onValueChange={(v) => { if (!v) return; setEditStatus(v); patch(selected._id, { status: v }) }}
+                  >
+                    <SelectTrigger id="inq-status" className="w-full" aria-label="Update status">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {STATUS_OPTS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <Label htmlFor="inq-notes">Notes</Label>
+                  <Textarea
+                    id="inq-notes"
+                    value={editNotes}
+                    onChange={(e) => setEditNotes(e.target.value)}
+                    placeholder="Internal notes…"
+                    aria-label="Inquiry notes"
+                    rows={4}
+                  />
+                </div>
+              </div>
+
+              <DialogFooter>
+                <Button
+                  type="button"
+                  disabled={saving}
+                  className="text-white"
+                  style={{ background: 'var(--rs-grad)' }}
+                  onClick={() => patch(selected._id, { notes: editNotes })}
+                >
+                  {saving && <Loader2 className="animate-spin" aria-hidden="true" />}
+                  {saving ? 'Saving…' : 'Save notes'}
+                </Button>
+              </DialogFooter>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
