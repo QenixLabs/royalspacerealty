@@ -2,7 +2,7 @@ import { dbConnect, dbReady } from './db'
 import { PropertyModel } from '@/models/Property'
 import { properties as statics, getProperty, propertyImages, type Property } from './properties'
 
-export type DbProperty = Property & { _id: string; images: { public_id: string; secure_url: string; cover?: boolean }[] }
+export type DbProperty = Property & { _id: string; featured?: boolean; images: { public_id: string; secure_url: string; cover?: boolean }[] }
 
 export async function listPropertiesDB(): Promise<DbProperty[]> {
   if (!dbReady()) return statics.map((p) => ({ ...p, _id: p.slug, images: propertyImages(p).map((u, i) => ({ public_id: `legacy/${p.slug}/${i}`, secure_url: u, cover: i === 0 })) }))
