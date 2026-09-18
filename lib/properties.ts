@@ -461,9 +461,9 @@ export const properties: Property[] = [
       'Spacious homes for every dream — fitness, recreation, relaxation and community living amenities.',
     ],
     configurations: [
-      { bhk: '1 BHK', price: '₹1.05 Cr onwards' },
-      { bhk: '2 BHK', price: '₹1.80 Cr onwards' },
-      { bhk: '3 BHK', price: '₹2.45 Cr onwards' },
+      { bhk: '1 BHK', area: 'On Request', price: '₹1.05 Cr onwards' },
+      { bhk: '2 BHK', area: 'On Request', price: '₹1.80 Cr onwards' },
+      { bhk: '3 BHK', area: 'On Request', price: '₹2.45 Cr onwards' },
     ],
     amenities: ['Fitness', 'Recreation', 'Relaxation', 'Community Living'],
     connectivity: [
