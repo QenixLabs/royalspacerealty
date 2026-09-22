@@ -32,7 +32,7 @@ export const socials = [
   { icon: MessageCircle, label: 'WhatsApp', href: 'https://wa.link/b9joi2' },
   { icon: Calculator, label: 'EMI Calculator', href: '/contact' },
   { icon: FacebookIcon, label: 'Facebook', href: 'https://www.facebook.com/share/1BputzWuJ2/' },
-  { icon: YoutubeIcon, label: 'YouTube', href: '#' },
+  { icon: YoutubeIcon, label: 'YouTube', href: 'https://www.youtube.com/@royalspacerealty' },
   { icon: InstagramIcon, label: 'Instagram', href: 'https://www.instagram.com/royalspacerealty_?utm_source=qr&stkn=OTR0ejl3eHQ3eXVh' },
   { icon: LinkedinIcon, label: 'LinkedIn', href: 'https://www.linkedin.com/in/manoj-suryavanshi-21415848?utm_source=share_via&utm_content=profile&utm_medium=member_android' },
 ]

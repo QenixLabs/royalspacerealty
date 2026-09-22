@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation'
 import { ChevronDown, Mail, Menu, MessageCircle, Phone, X } from 'lucide-react'
 import { socials } from './socials'
 
-type NavChild = { href: string; label: string }
+type NavChild = { href: string; label: string; children?: NavChild[] }
 type NavLink = { href: string; label: string; children?: NavChild[] }
 
 const navLinks: NavLink[] = [
@@ -23,11 +23,18 @@ const navLinks: NavLink[] = [
     href: '/projects',
     label: 'Projects',
     children: [
-      { href: '/projects', label: 'All Projects' },
-      { href: '/projects?location=Kandivali', label: 'Projects In Kandivali' },
-      { href: '/projects?location=Borivali', label: 'Projects In Borivali' },
-      { href: '/projects?location=Malad', label: 'Projects In Malad' },
-      { href: '/projects?location=Goregaon', label: 'Projects In Goregaon' },
+      {
+        href: '/projects',
+        label: 'Under Construction',
+        children: [
+          { href: '/projects', label: 'All Projects' },
+          { href: '/projects?location=Kandivali', label: 'Projects In Kandivali' },
+          { href: '/projects?location=Borivali', label: 'Projects In Borivali' },
+          { href: '/projects?location=Malad', label: 'Projects In Malad' },
+          { href: '/projects?location=Goregaon', label: 'Projects In Goregaon' },
+        ],
+      },
+      { href: '/projects?type=resale', label: 'Resale Properties' },
     ],
   },
   { href: '/services', label: 'Services' },
@@ -73,22 +80,58 @@ export function SiteHeader() {
     }
   }, [openDrop])
 
-  const isActive = (link: NavLink) => {
-    if (link.children) {
-      return link.children.some((c) => {
-        const base = c.href.split('?')[0]
-        return pathname === base
-      })
-    }
-    return pathname === link.href
-  }
-
   const isChildActive = (childHref: string) => {
     const current = pathname + query
     if (current === childHref) return true
     if (childHref === '/projects' && pathname === '/projects' && !query.includes('location=')) return true
     return false
   }
+
+  const isNavChildActive = (child: NavChild) =>
+    isChildActive(child.href) || (child.children?.some(isNavChildActive) ?? false)
+
+  const isActive = (link: NavLink) =>
+    link.children ? link.children.some(isNavChildActive) : pathname === link.href
+
+  const renderChildren = (children: NavChild[], parentKey: string): React.ReactNode =>
+    children.map((child) => {
+      const childKey = `${parentKey}:${child.label}`
+      if (child.children) {
+        return (
+          <div className="rs-nav-subitem" key={childKey}>
+            <button
+              type="button"
+              className={`rs-nav-parent rs-nav-subparent ${isNavChildActive(child) ? 'active' : ''}`}
+              aria-expanded={openDrop === childKey}
+              aria-haspopup="true"
+              onClick={() => setOpenDrop((v) => (v === childKey ? null : childKey))}
+            >
+              {child.label}
+              <ChevronDown size={14} aria-hidden="true" className={openDrop === childKey ? 'is-open' : ''} />
+            </button>
+            <div className={openDrop === childKey ? 'rs-nav-subdrop rs-nav-subdrop-open' : 'rs-nav-subdrop'} role="menu">
+              {renderChildren(child.children, childKey)}
+            </div>
+          </div>
+        )
+      }
+      return (
+        <Link
+          key={childKey}
+          href={child.href}
+          role="menuitem"
+          className={isChildActive(child.href) ? 'active' : ''}
+          onClick={() => {
+            setOpenDrop(null)
+            setMenuOpen(false)
+            const q = child.href.includes('?') ? child.href.slice(child.href.indexOf('?')) : ''
+            setQuery(q)
+          }}
+        >
+          {child.label}
+        </Link>
+      )
+    })
 
   return (
     <>
@@ -135,22 +178,7 @@ export function SiteHeader() {
                   <ChevronDown size={14} aria-hidden="true" className={openDrop === link.label ? 'is-open' : ''} />
                 </button>
                 <div className={openDrop === link.label ? 'rs-nav-drop rs-nav-drop-open' : 'rs-nav-drop'} role="menu">
-                  {link.children.map((child) => (
-                    <Link
-                      key={child.href + child.label}
-                      href={child.href}
-                      role="menuitem"
-                      className={isChildActive(child.href) ? 'active' : ''}
-                      onClick={() => {
-                        setOpenDrop(null)
-                        setMenuOpen(false)
-                        const q = child.href.includes('?') ? child.href.slice(child.href.indexOf('?')) : ''
-                        setQuery(q)
-                      }}
-                    >
-                      {child.label}
-                    </Link>
-                  ))}
+                  {renderChildren(link.children, link.label)}
                 </div>
               </div>
             ) : (

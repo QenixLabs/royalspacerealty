@@ -40,8 +40,7 @@ export default function AboutPage() {
         <div className="rs-about-grid">
           <Reveal>
             <div>
-              <p className="rs-kicker">WELCOME TO ROYAL SPACE REALTY</p>
-              <h2>The Real Estate People</h2>
+              <h2>WELCOME TO ROYAL SPACE REALTY</h2>
               <p>
                 Manoj Suryavanshi is one of the leading Real Estate consultants. Established in 2014 by
                 Mr. Manoj Suryavanshi, who has an experience of more than 12 years in this field, we have
