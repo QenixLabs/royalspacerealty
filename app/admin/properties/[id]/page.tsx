@@ -18,7 +18,7 @@ type Config = { bhk: string; area: string; price?: string }
 type Form = {
   name: string; slug: string; builder: string; location: string; address: string
   status: string; priceDisplay: string; areaDisplay: string; bhkDisplay: string
-  category: string; overview: string; amenities: string; featured: boolean
+  category: string; listingType: string; overview: string; amenities: string; connectivity: string; featured: boolean
   configs: Config[]; images: Img[]
 }
 
@@ -27,7 +27,7 @@ type FieldErrors = Partial<Record<'name' | 'slug' | 'location', string>>
 const blank: Form = {
   name: '', slug: '', builder: '', location: '', address: '',
   status: 'Ready to Move', priceDisplay: '', areaDisplay: '', bhkDisplay: '',
-  category: 'Residential', overview: '', amenities: '', featured: false,
+  category: 'Residential', listingType: 'Under Construction', overview: '', amenities: '', connectivity: '', featured: false,
   configs: [], images: [],
 }
 
@@ -67,9 +67,10 @@ export default function PropertyEditor({ params }: { params: Promise<{ id: strin
         location: found.location ?? '', address: found.address ?? '',
         status: found.status ?? '', priceDisplay: found.priceDisplay ?? '',
         areaDisplay: found.areaDisplay ?? '', bhkDisplay: found.bhkDisplay ?? '',
-        category: found.category ?? 'Residential', featured: !!found.featured,
+        category: found.category ?? 'Residential', listingType: found.listingType ?? 'Under Construction', featured: !!found.featured,
         overview: Array.isArray(found.overview) ? found.overview.join('\n') : '',
         amenities: Array.isArray(found.amenities) ? found.amenities.join(', ') : '',
+        connectivity: Array.isArray(found.connectivity) ? found.connectivity.join('\n') : '',
         configs: found.configurations ?? [], images: found.images ?? [],
       })
       setLoading(false)
@@ -103,9 +104,11 @@ export default function PropertyEditor({ params }: { params: Promise<{ id: strin
         name: form.name, slug: form.slug, builder: form.builder, location: form.location,
         address: form.address, status: form.status, priceDisplay: form.priceDisplay,
         areaDisplay: form.areaDisplay, bhkDisplay: form.bhkDisplay, category: form.category,
+        listingType: form.listingType,
         featured: form.featured,
         overview: form.overview.split('\n').map((s) => s.trim()).filter(Boolean),
         amenities: form.amenities.split(',').map((s) => s.trim()).filter(Boolean),
+        connectivity: form.connectivity.split('\n').map((s) => s.trim()).filter(Boolean),
         configurations: form.configs, images: form.images,
       }
       const res = await fetch(isNew ? '/api/admin/properties' : `/api/admin/properties/${id}`, {
@@ -210,6 +213,17 @@ export default function PropertyEditor({ params }: { params: Promise<{ id: strin
               </SelectContent>
             </Select>
           </Field>
+          <Field id="f-listing-type" label="Listing type">
+            <Select value={form.listingType} onValueChange={(v) => v && set('listingType', v)}>
+              <SelectTrigger id="f-listing-type" className="w-full">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Under Construction">Under Construction</SelectItem>
+                <SelectItem value="Resale">Resale</SelectItem>
+              </SelectContent>
+            </Select>
+          </Field>
           <div className="flex items-center gap-2 pt-1">
             <button
               type="button"
@@ -306,6 +320,23 @@ export default function PropertyEditor({ params }: { params: Promise<{ id: strin
             placeholder="Pool, Gym, Park"
             aria-label="Amenities"
             rows={3}
+          />
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Connectivity</CardTitle>
+          <CardDescription>Nearby transport and landmarks, one per line.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Textarea
+            id="f-connectivity"
+            value={form.connectivity}
+            onChange={(e) => set('connectivity', e.target.value)}
+            placeholder={'Kandivali Metro Station — 10 mins\nUpcoming Coastal Road — 270 m from project'}
+            aria-label="Connectivity"
+            rows={4}
           />
         </CardContent>
       </Card>

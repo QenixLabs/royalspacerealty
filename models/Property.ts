@@ -28,6 +28,7 @@ const PropertySchema = new Schema(
     areaDisplay: { type: String, required: true },
     bhkDisplay: { type: String, required: true },
     category: { type: String, enum: ['Residential', 'Commercial'], default: 'Residential' },
+    listingType: { type: String, enum: ['Under Construction', 'Resale'], default: 'Under Construction', index: true },
     mapUrl: String,
     images: { type: [Img], default: [] },
     featured: { type: Boolean, default: false },

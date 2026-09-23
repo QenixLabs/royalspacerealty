@@ -6,22 +6,28 @@ import { Badge } from '@/components/ui/badge'
 import { buttonVariants } from '@/components/ui/button'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
+import {
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+} from '@/components/ui/select'
 import { Skeleton } from '@/components/ui/skeleton'
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from '@/components/ui/table'
 import { cn } from 'cn'
 
-type Item = { _id: string; slug: string; name: string; location: string; priceDisplay: string; status: string; featured?: boolean; updatedAt: string }
+type Item = { _id: string; slug: string; name: string; location: string; priceDisplay: string; status: string; listingType?: string; featured?: boolean; updatedAt: string }
+
+const LISTING_TYPES = ['Under Construction', 'Resale'] as const
 
 export default function PropertiesAdmin() {
   const [items, setItems] = useState<Item[]>([])
   const [q, setQ] = useState('')
+  const [type, setType] = useState<string>('')
   const [loading, setLoading] = useState(true)
 
-  async function load(query = '') {
+  async function load(query = '', listingType = type) {
     setLoading(true)
-    const res = await fetch(`/api/admin/properties?q=${encodeURIComponent(query)}`)
+    const res = await fetch(`/api/admin/properties?q=${encodeURIComponent(query)}&type=${encodeURIComponent(listingType)}`)
     const data = await res.json()
     setItems(data.items ?? [])
     setLoading(false)
@@ -30,9 +36,9 @@ export default function PropertiesAdmin() {
 
   // Live search, debounced 300ms
   useEffect(() => {
-    const t = setTimeout(() => { load(q) }, 300)
+    const t = setTimeout(() => { load(q, type) }, 300)
     return () => clearTimeout(t)
-  }, [q])
+  }, [q, type])
 
   async function remove(id: string, name: string) {
     if (!confirm(`Delete ${name}? This cannot be undone.`)) return
@@ -56,15 +62,28 @@ export default function PropertiesAdmin() {
 
       <Card className="bg-white text-neutral-900 border-neutral-200">
         <CardContent className="flex flex-col gap-4">
-          <div className="relative max-w-md">
-            <Search className="absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
-            <Input
-              value={q}
-              onChange={(e) => setQ(e.target.value)}
-              placeholder="Search name, location, builder…"
-              aria-label="Search properties"
-              className="pl-8"
-            />
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+            <div className="relative max-w-md sm:flex-1">
+              <Search className="absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
+              <Input
+                value={q}
+                onChange={(e) => setQ(e.target.value)}
+                placeholder="Search name, location, builder…"
+                aria-label="Search properties"
+                className="pl-8"
+              />
+            </div>
+            <Select value={type || 'all'} onValueChange={(v) => setType(v === 'all' ? '' : v ?? '')}>
+              <SelectTrigger aria-label="Filter by listing type" className="w-full sm:w-52">
+                <SelectValue placeholder="All types" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All types</SelectItem>
+                {LISTING_TYPES.map((t) => (
+                  <SelectItem key={t} value={t}>{t}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           {!loading && items.length === 0 ? (
@@ -82,6 +101,7 @@ export default function PropertiesAdmin() {
                     <TableHead>Name</TableHead>
                     <TableHead>Location</TableHead>
                     <TableHead>Price</TableHead>
+                    <TableHead>Type</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead className="w-[1%] whitespace-nowrap text-right">Actions</TableHead>
                   </TableRow>
@@ -90,7 +110,7 @@ export default function PropertiesAdmin() {
                   {loading ? (
                     Array.from({ length: 5 }).map((_, i) => (
                       <TableRow key={i}>
-                        {Array.from({ length: 5 }).map((__, j) => (
+                        {Array.from({ length: 6 }).map((__, j) => (
                           <TableCell key={j}><Skeleton className="h-5 w-full max-w-32" /></TableCell>
                         ))}
                       </TableRow>
@@ -111,6 +131,20 @@ export default function PropertiesAdmin() {
                         </TableCell>
                         <TableCell>{p.location}</TableCell>
                         <TableCell>{p.priceDisplay}</TableCell>
+                        <TableCell>
+                          {p.listingType && (
+                            <Badge
+                              variant={p.listingType === 'Resale' ? 'secondary' : 'outline'}
+                              className={cn(
+                                p.listingType === 'Resale'
+                                  ? 'bg-emerald-100 text-emerald-800 hover:bg-emerald-100'
+                                  : 'border-amber-400 text-amber-700 hover:bg-transparent',
+                              )}
+                            >
+                              {p.listingType}
+                            </Badge>
+                          )}
+                        </TableCell>
                         <TableCell className="max-w-[220px]">
                           <Badge
                             variant={p.status === 'Ready to Move' ? 'secondary' : 'outline'}

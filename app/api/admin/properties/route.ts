@@ -13,8 +13,11 @@ export async function GET(req: Request) {
   if (!(await authed())) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   await dbConnect()
   const q = new URL(req.url).searchParams.get('q')?.toLowerCase() ?? ''
+  const type = new URL(req.url).searchParams.get('type') ?? ''
   const docs = await PropertyModel.find({}).sort({ updatedAt: -1 }).lean()
-  const filtered = q ? docs.filter((d: Record<string, unknown>) => `${d.name} ${d.location} ${d.builder}`.toLowerCase().includes(q)) : docs
+  const filtered = docs
+    .filter((d: Record<string, unknown>) => !type || d.listingType === type)
+    .filter((d: Record<string, unknown>) => !q || `${d.name} ${d.location} ${d.builder}`.toLowerCase().includes(q))
   return NextResponse.json({ items: filtered })
 }
 
