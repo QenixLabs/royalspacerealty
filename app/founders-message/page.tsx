@@ -71,6 +71,7 @@ export default function FoundersMessagePage() {
                   alt="Manoj Suryavanshi, Founder of Royal Space Realty"
                   loading="eager"
                   decoding="async"
+                  style={{ transform: 'scaleX(-1)' }}
                 />
                 <div className="rs-fm-photo-meta">
                   <p>Manoj Suryavanshi</p>

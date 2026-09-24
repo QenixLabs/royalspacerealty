@@ -25,7 +25,7 @@ const navLinks: NavLink[] = [
     children: [
       {
         href: '/projects',
-        label: 'Under Construction',
+        label: 'New Construction',
         children: [
           { href: '/projects', label: 'All Projects' },
           { href: '/projects?location=Kandivali', label: 'Projects In Kandivali' },
@@ -34,7 +34,17 @@ const navLinks: NavLink[] = [
           { href: '/projects?location=Goregaon', label: 'Projects In Goregaon' },
         ],
       },
-      { href: '/projects?type=resale', label: 'Resale Properties' },
+      {
+        href: '/projects?type=resale',
+        label: 'Ready to Move',
+        children: [
+          { href: '/projects?type=resale', label: 'All Ready to Move' },
+          { href: '/projects?type=resale&location=Kandivali', label: 'Ready to Move In Kandivali' },
+          { href: '/projects?type=resale&location=Borivali', label: 'Ready to Move In Borivali' },
+          { href: '/projects?type=resale&location=Malad', label: 'Ready to Move In Malad' },
+          { href: '/projects?type=resale&location=Goregaon', label: 'Ready to Move In Goregaon' },
+        ],
+      },
     ],
   },
   { href: '/services', label: 'Services' },
@@ -137,13 +147,13 @@ export function SiteHeader() {
     <>
       <div className="rs-topbar">
         <a href="https://wa.link/b9joi2" target="_blank" rel="noreferrer">
-          <MessageCircle size={14} /> Chat With Us
+          <MessageCircle size={17} /> Chat With Us
         </a>
         <a href="tel:+919867915101">
-          <Phone size={14} /> +91 9867915101
+          <Phone size={17} /> +91 9867915101
         </a>
         <a href="mailto:manoj@royalspacerealty.in">
-          <Mail size={14} /> manoj@royalspacerealty.in
+          <Mail size={17} /> manoj@royalspacerealty.in
         </a>
       </div>
 

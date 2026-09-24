@@ -62,7 +62,7 @@ export default function ContactPage() {
                 <Clock size={20} />
                 <div>
                   <strong>Working Hours</strong>
-                  <p>Mon – Sat, 10:00 AM – 7:00 PM</p>
+                  <p>All Days - 10am - 8pm</p>
                 </div>
               </div>
             </div>
