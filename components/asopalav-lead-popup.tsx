@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { CheckCircle2, MessageCircle, X } from 'lucide-react'
 import {
@@ -9,31 +9,10 @@ import {
   DialogDescription,
   DialogTitle,
 } from '@/components/ui/dialog'
-import {
-  getPopupSchedule,
-  isPopupPathEligible,
-  isPopupSuppressed,
-  POPUP_STORAGE_KEYS,
-  shouldEnterPopupFlow,
-} from '@/lib/lead-popup'
+import { POPUP_INTERVAL_MS } from '@/lib/lead-popup'
 
 const WHATSAPP_URL = 'https://wa.link/b9joi2'
 const PROJECT_SLUG = 'modirealty-asopalav-kandivali'
-
-function readTimestamp(key: string) {
-  const stored = window.localStorage.getItem(key)
-  if (!stored) return undefined
-  const parsed = Number(stored)
-  return Number.isFinite(parsed) ? parsed : undefined
-}
-
-function writeStorage(storage: Storage, key: string, value: string) {
-  try {
-    storage.setItem(key, value)
-  } catch {
-    // Private browsing and strict privacy settings can disable web storage.
-  }
-}
 
 export function AsopalavLeadPopup() {
   const pathname = usePathname()
@@ -41,127 +20,23 @@ export function AsopalavLeadPopup() {
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
-  const selectedForSession = useRef<boolean | null>(null)
-  const sessionSchedule = useRef<ReturnType<typeof getPopupSchedule> | undefined>(undefined)
-  const shownThisSession = useRef(false)
-  const converted = useRef(false)
 
   useEffect(() => {
-    if (!isPopupPathEligible(pathname)) {
+    if (pathname === '/admin' || pathname.startsWith('/admin/')) {
       setOpen(false)
       return
     }
-    if (shownThisSession.current) return
 
-    try {
-      if (window.sessionStorage.getItem(POPUP_STORAGE_KEYS.sessionSeen) === 'true') {
-        shownThisSession.current = true
-        return
-      }
-
-      if (
-        isPopupSuppressed({
-          dismissedAt: readTimestamp(POPUP_STORAGE_KEYS.dismissedAt),
-          submittedAt: readTimestamp(POPUP_STORAGE_KEYS.submittedAt),
-        })
-      ) {
-        return
-      }
-
-      const storedSelection = window.sessionStorage.getItem(POPUP_STORAGE_KEYS.sessionSelected)
-      if (storedSelection) {
-        selectedForSession.current = storedSelection === 'true'
-      } else {
-        selectedForSession.current = shouldEnterPopupFlow()
-        writeStorage(
-          window.sessionStorage,
-          POPUP_STORAGE_KEYS.sessionSelected,
-          String(selectedForSession.current),
-        )
-      }
-    } catch {
-      selectedForSession.current ??= shouldEnterPopupFlow()
-    }
-
-    if (!selectedForSession.current) return
-
-    const isMobile = window.matchMedia('(pointer: coarse)').matches || window.innerWidth < 768
-    const schedule = getPopupSchedule(sessionSchedule.current, isMobile)
-    sessionSchedule.current = schedule
-    const scrollThreshold = isMobile ? 0.35 : 0.3
-    let dwellComplete = Date.now() >= schedule.dwellAt
-    let exitReady = Date.now() >= schedule.exitAt
-    let opened = false
-    let lastTypingAt = 0
-    let retryTimer: number | undefined
-
-    const hasScrolledEnough = () => {
-      const availableScroll = document.documentElement.scrollHeight - window.innerHeight
-      return availableScroll <= 0 || window.scrollY / availableScroll >= scrollThreshold
-    }
-
-    const hasOpenDialog = () => Boolean(document.querySelector('[role="dialog"], [aria-modal="true"]'))
-
-    const showPopup = () => {
-      if (opened || shownThisSession.current) return
-      const isTyping = Date.now() - lastTypingAt < 5_000
-      if (isTyping || hasOpenDialog()) {
-        window.clearTimeout(retryTimer)
-        retryTimer = window.setTimeout(showPopup, 3_000)
-        return
-      }
-
-      opened = true
-      shownThisSession.current = true
-      writeStorage(window.sessionStorage, POPUP_STORAGE_KEYS.sessionSeen, 'true')
+    const timer = window.setInterval(() => {
+      setSubmitted(false)
+      setError('')
       setOpen(true)
-    }
+    }, POPUP_INTERVAL_MS)
 
-    const tryEngagementTrigger = () => {
-      if (dwellComplete && hasScrolledEnough()) showPopup()
-    }
-
-    const onScroll = () => tryEngagementTrigger()
-    const onInput = () => {
-      lastTypingAt = Date.now()
-    }
-    const onMouseOut = (event: MouseEvent) => {
-      if (!isMobile && exitReady && event.clientY <= 0 && !event.relatedTarget) showPopup()
-    }
-
-    const dwellTimer = window.setTimeout(() => {
-      dwellComplete = true
-      tryEngagementTrigger()
-    }, Math.max(0, schedule.dwellAt - Date.now()))
-    const exitTimer = window.setTimeout(() => {
-      exitReady = true
-    }, Math.max(0, schedule.exitAt - Date.now()))
-
-    window.addEventListener('scroll', onScroll, { passive: true })
-    document.addEventListener('input', onInput, true)
-    document.addEventListener('mouseout', onMouseOut)
-
-    return () => {
-      window.clearTimeout(dwellTimer)
-      window.clearTimeout(exitTimer)
-      window.clearTimeout(retryTimer)
-      window.removeEventListener('scroll', onScroll)
-      document.removeEventListener('input', onInput, true)
-      document.removeEventListener('mouseout', onMouseOut)
-    }
+    return () => window.clearInterval(timer)
   }, [pathname])
 
-  function markConverted() {
-    converted.current = true
-    shownThisSession.current = true
-    writeStorage(window.localStorage, POPUP_STORAGE_KEYS.submittedAt, String(Date.now()))
-    writeStorage(window.sessionStorage, POPUP_STORAGE_KEYS.sessionSeen, 'true')
-  }
-
   function handleOpenChange(nextOpen: boolean) {
-    if (!nextOpen && open && !converted.current) {
-      writeStorage(window.localStorage, POPUP_STORAGE_KEYS.dismissedAt, String(Date.now()))
-    }
     setOpen(nextOpen)
   }
 
@@ -187,7 +62,6 @@ export function AsopalavLeadPopup() {
       const result = await response.json()
       if (!response.ok) throw new Error(result.error ?? 'Could not send your enquiry.')
 
-      markConverted()
       setSubmitted(true)
     } catch (submitError) {
       setError(submitError instanceof Error ? submitError.message : 'Could not send your enquiry. Try again.')
