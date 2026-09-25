@@ -24,6 +24,7 @@ export function SiteFooter() {
           />
           <h4>CONTACT US</h4>
           <p>Get in touch with us</p>
+          <p>Manoj Suryavanshi</p>
           <p>
             Shop No 5, Durga Mata Welfare Society, Salve Lane, New Link Road, Kandivali West, Mumbai,
             Maharashtra 400067
