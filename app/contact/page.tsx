@@ -26,6 +26,7 @@ export default function ContactPage() {
           <Reveal>
             <div className="rs-contact-info">
               <h2>Get In Touch</h2>
+              <p>Manoj Suryavanshi</p>
               <p>Drop your details and Manoj Suryavanshi will call you back within a few hours.</p>
               <div className="rs-contact-item">
                 <MapPin size={20} />
@@ -55,7 +56,7 @@ export default function ContactPage() {
                 <Clock size={20} />
                 <div>
                   <strong>Maha RERA No.</strong>
-                  <p>A518000018427</p>
+                  <p>A51800018427</p>
                 </div>
               </div>
               <div className="rs-contact-item">

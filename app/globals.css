@@ -320,7 +320,7 @@
 .rs-page-section { margin: 0 auto; max-width: 1140px; padding: 90px 5vw; width: calc(100% - 2vw); }
 .rs-kicker { color: var(--purple-700); font-size: 12px; font-weight: 700; letter-spacing: .18em; margin: 0 0 14px; }
 .rs-about-grid { align-items: center; display: grid; gap: 60px; grid-template-columns: 1fr 1fr; }
-.rs-about-grid h2 { font-size: clamp(26px, 3.2vw, 38px); font-weight: 800; margin: 0 0 20px; }
+.rs-about-grid h2 { font-size: clamp(22px, 2.4vw, 30px); font-weight: 800; letter-spacing: -.03em; margin: 0 0 20px; white-space: nowrap; }
 .rs-about-grid p { color: #777; font-size: 14px; line-height: 1.85; }
 .rs-about-img { background-position: center; background-size: cover; border-radius: 4px; min-height: 380px; }
 .rs-stats { background: var(--rs-grad); display: grid; gap: 20px; grid-template-columns: repeat(4, 1fr); padding: 56px 5vw; }

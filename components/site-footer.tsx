@@ -30,7 +30,7 @@ export function SiteFooter() {
           </p>
           <p>Email: manoj@royalspacerealty.in</p>
           <p>Phone: +91 9867915101</p>
-          <p>Maha RERA No. A518000018427</p>
+          <p>Maha RERA No. A51800018427</p>
         </div>
         <div>
           <h4>LINKS</h4>
