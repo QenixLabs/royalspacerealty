@@ -1,3 +1,8 @@
+import { AREAS, type Area, type ListingType } from './listing'
+
+export { AREAS, LISTING_TYPES, LISTING_TYPE_LABEL, toListingType } from './listing'
+export type { Area, ListingType } from './listing'
+
 export type PropertyConfig = {
   bhk: string
   area: string
@@ -10,9 +15,11 @@ export type Property = {
   builder: string
   location: string
   address: string
+  area?: Area
   rera?: string
   status: string
   possession?: string
+  listingType?: ListingType
   tagline?: string
   overview: string[]
   configurations: PropertyConfig[]
@@ -35,9 +42,11 @@ export const properties: Property[] = [
     name: 'Ocean Breeze',
     builder: 'Bhairav Smile Infraprojects',
     location: 'Charkop, Kandivali West',
+    area: 'Kandivali',
     address: 'Plot No. 810, Near K.B. Patil International School, Charkop, Sector-8, Kandivali West, Mumbai',
     rera: 'P51800053078',
     status: 'Under Construction — 13th slab completed, 14th in progress',
+    listingType: 'Under Construction',
     tagline: 'Luxury meets authenticity — Vastu-compliant, pagoda-facing flats with a double-height grand lobby.',
     overview: [
       'Premium G+23 storey residential tower by Bhairav Smile Infraprojects at the heart of Charkop, Kandivali West.',
@@ -69,8 +78,10 @@ export const properties: Property[] = [
     name: 'Gold Crest',
     builder: 'Shraddha Prime Projects Ltd',
     location: 'Bhanu Park, Kandivali West',
+    area: 'Kandivali',
     address: 'Adukia Rd, Bhanu Park, Kandivali West, Near Kandivali Railway Station, Mumbai',
     status: 'Ready to Move — limited inventory',
+    listingType: 'Resale',
     tagline: 'BSE-listed developer with 15+ years, 9.2 Mn sq.ft delivered and 5000+ satisfied customers.',
     overview: [
       'Gold Crest by Shraddha Prime Projects Ltd — a BSE-listed real estate company with expertise of more than 15 years.',
@@ -104,8 +115,10 @@ export const properties: Property[] = [
     name: 'Rashmi Manorath',
     builder: 'Modi Navnirman',
     location: 'Borivali West',
+    area: 'Borivali',
     address: 'Borivali West, Mumbai (1 min from Borivali Station)',
     status: 'Under Construction — 13th slab completed, Full CC received',
+    listingType: 'Under Construction',
     possession: 'March 2027',
     tagline: 'Where life comes together — 1 & 2 BHK smart homes with jodi options.',
     overview: [
@@ -136,8 +149,10 @@ export const properties: Property[] = [
     name: 'DPS Nakshatra Heights',
     builder: 'DPS Group',
     location: 'Sector 2, Charkop, Kandivali West',
+    area: 'Kandivali',
     address: 'Sector 2, Charkop, Kandivali West, Mumbai',
     status: 'New Launch',
+    listingType: 'Under Construction',
     tagline: '21-storey premium luxury tower with podium ramp car parking and lifetime no-obstruction views.',
     overview: [
       'Premium luxury 21-storey residential tower with lavishly designed 1, 2 & 3 BHK apartments.',
@@ -169,9 +184,11 @@ export const properties: Property[] = [
     name: 'HUM GS Heights',
     builder: 'HUM Developers',
     location: 'Sector 5, Charkop, Kandivali West',
+    area: 'Kandivali',
     address: 'Sector 5, Charkop, Kandivali West, Mumbai - 400067',
     rera: 'PM1180002502424',
     status: 'Under Construction — 11% dues collected',
+    listingType: 'Under Construction',
     possession: 'Builder commitment 2029 (RERA 2031)',
     tagline: 'The Divine Living — 21+ world-class amenities across a G+23 storey tower.',
     overview: [
@@ -208,9 +225,11 @@ export const properties: Property[] = [
     name: 'Jaswanti Jewel',
     builder: 'Ashray Group',
     location: 'Off M.G. Road, Kandivali West',
+    area: 'Kandivali',
     address: 'Chhatrapati Shivaji Road, Off M.G. Road, Kandivali West, Mumbai - 400067',
     rera: 'P51800048817',
     status: 'Under Construction',
+    listingType: 'Under Construction',
     tagline: 'An ultra-luxurious 37-storey premium tower — club-life & sky-life indulgences 390 ft above ground.',
     overview: [
       'Jaswanti Jewel by Ashray Group — creators of Kandivali’s finest addresses — a G+37 storey single tower in a premium zone.',
@@ -244,9 +263,11 @@ export const properties: Property[] = [
     name: 'Shree Ascend Towers',
     builder: 'Shree Group',
     location: 'Chincholi Bunder Road, Malad West',
+    area: 'Malad',
     address: 'Next to Dheeraj Solitaire, Chincholi Bunder Road, Malad West, Mumbai',
     rera: 'P51800049273',
     status: 'Under Construction — construction in full swing, Full CC received',
+    listingType: 'Under Construction',
     possession: 'Nearing possession',
     tagline: 'Where luxury, Vastu and value converge — 40% open space at ground level.',
     overview: [
@@ -285,9 +306,11 @@ export const properties: Property[] = [
     name: 'TSAAYA',
     builder: 'Sambhav Group',
     location: 'Kandivali East',
+    area: 'Kandivali',
     address: 'Corner of Akurli Road & Ashok Chakravarti Road, Kandivali East, Mumbai',
     rera: 'P51800046545',
     status: 'Nearing Possession — RCC work completed',
+    listingType: 'Under Construction',
     tagline: 'A landmark address — zero kilometres from railway & metro, Jain temple within the premises.',
     overview: [
       'TSAAYA by Sambhav Group — 2, 3 & 4 BHK balcony homes at a landmark Kandivali East address.',
@@ -326,8 +349,10 @@ export const properties: Property[] = [
     name: 'Empire Fairmont',
     builder: 'Empire Group',
     location: 'I.C. Colony, Borivali West',
+    area: 'Borivali',
     address: 'I.C. Colony, Borivali West, Mumbai',
     status: 'Nearing Possession — possession in 6-7 months',
+    listingType: 'Under Construction',
     tagline: 'Luxury homes crafted for modern living — limited luxury residences available.',
     overview: [
       'Empire Fairmont brings a perfect blend of luxury, comfort and convenience in the heart of I.C. Colony, Borivali West.',
@@ -359,8 +384,10 @@ export const properties: Property[] = [
     name: 'Rajgruha',
     builder: 'Rajgruha Group',
     location: 'Kandivali West',
+    area: 'Kandivali',
     address: 'Kandivali West, Mumbai',
     status: 'Ready — few flats available',
+    listingType: 'Resale',
     tagline: 'Premium 2 & 3 BHK residences on high floors — only a few flats remaining.',
     overview: [
       'Premium 2 BHK & 3 BHK homes available on high floors with clear views.',
@@ -386,9 +413,11 @@ export const properties: Property[] = [
     name: 'Shreeji Eternity',
     builder: 'Shreeji Group',
     location: 'Link Road, Malad West',
+    area: 'Malad',
     address: 'Sales Lounge, Ground Floor, Near Zenith Hospital, Link Road, Mith Chowki Junction, Malad West, Mumbai - 400064',
     rera: 'P51800054310 / P51800054233',
     status: 'Under Construction',
+    listingType: 'Under Construction',
     tagline: 'Redefining elegance at Link Road — 40+ amenities across 4 towers.',
     overview: [
       'Shreeji Eternity — an attractive prime location redefining elegance at Link Road, Malad West.',
@@ -417,8 +446,10 @@ export const properties: Property[] = [
     name: 'NP Harmony',
     builder: 'NP Group',
     location: 'Borivali West',
+    area: 'Borivali',
     address: 'Behind Vazira Ganesh Temple, Borivali West, Mumbai',
     status: 'RCC Completed — nearing possession',
+    listingType: 'Under Construction',
     possession: 'December 2026',
     tagline: 'Live life like a Royal Family — 7-storey luxurious towers, Vastu-compliant flats.',
     overview: [
@@ -452,8 +483,10 @@ export const properties: Property[] = [
     name: 'Code Name: Sukoon',
     builder: 'NP Group',
     location: 'Borivali West',
+    area: 'Borivali',
     address: 'Borivali West, Mumbai (Railway station 1.5 km)',
     status: 'New Launch',
+    listingType: 'Under Construction',
     tagline: 'A home that gives you peace, pride & a premium lifestyle — 15-storey elegant residential tower.',
     overview: [
       'Code Name: Sukoon — thoughtfully designed for those who seek elegance, convenience and serenity in one perfect address.',

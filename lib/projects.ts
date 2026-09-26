@@ -1,15 +1,17 @@
-import { properties, propertyImages, type Property } from './properties'
+import { properties, propertyImages, AREAS, type Area, type ListingType, type Property } from './properties'
 import { listPropertiesDB } from './properties-db'
 
 export type Project = {
   slug: string
   name: string
   location: string
+  area: Area | null
   price: string
-  area: string
+  carpetArea: string
   bedrooms: string
   image: string
   category: 'Residential' | 'Commercial'
+  listingType: ListingType
   featured: boolean
   bhks: number[]
   priceMinL: number | null
@@ -28,6 +30,13 @@ const parseBhks = (display: string): number[] =>
     .map((t) => parseFloat(t.trim()))
     .filter((n) => !Number.isNaN(n))
 
+/** Falls back to a substring match so legacy rows without `area` still filter correctly. */
+const toArea = (p: Property): Area | null => {
+  if (p.area && (AREAS as readonly string[]).includes(p.area)) return p.area
+  const loc = p.location.toLowerCase()
+  return AREAS.find((a) => loc.includes(a.toLowerCase())) ?? null
+}
+
 const toProject = (p: Property, image: string, featured = false): Project => {
   const pricesCr = p.configurations
     .map((c) => parseCr(c.price))
@@ -38,11 +47,13 @@ const toProject = (p: Property, image: string, featured = false): Project => {
     slug: p.slug,
     name: p.name,
     location: p.location,
+    area: toArea(p),
     price: p.priceDisplay,
-    area: p.areaDisplay,
+    carpetArea: p.areaDisplay,
     bedrooms: p.bhkDisplay,
     image,
     category: p.category,
+    listingType: p.listingType ?? 'Under Construction',
     featured,
     bhks: parseBhks(p.bhkDisplay),
     priceMinL,

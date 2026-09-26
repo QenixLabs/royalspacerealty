@@ -12,12 +12,14 @@ import {
 import { Skeleton } from '@/components/ui/skeleton'
 import { Textarea } from '@/components/ui/textarea'
 import { ImageUploader, type Img } from '@/components/admin/image-uploader'
+import { AREAS, LISTING_TYPES, LISTING_TYPE_LABEL, type ListingType } from '@/lib/listing'
 import { cn } from 'cn'
 
 type Config = { bhk: string; area: string; price?: string }
 type Form = {
   name: string; slug: string; builder: string; location: string; address: string
-  status: string; priceDisplay: string; areaDisplay: string; bhkDisplay: string
+  area: string; status: string; possession: string
+  priceDisplay: string; areaDisplay: string; bhkDisplay: string
   category: string; listingType: string; overview: string; amenities: string; connectivity: string; featured: boolean
   configs: Config[]; images: Img[]
 }
@@ -25,17 +27,19 @@ type Form = {
 type FieldErrors = Partial<Record<'name' | 'slug' | 'location', string>>
 
 const blank: Form = {
-  name: '', slug: '', builder: '', location: '', address: '',
-  status: 'Ready to Move', priceDisplay: '', areaDisplay: '', bhkDisplay: '',
+  name: '', slug: '', builder: '', location: '', address: '', area: '',
+  status: '', possession: '',
+  priceDisplay: '', areaDisplay: '', bhkDisplay: '',
   category: 'Residential', listingType: 'Under Construction', overview: '', amenities: '', connectivity: '', featured: false,
   configs: [], images: [],
 }
 
-function Field({ id, label, error, children }: { id: string; label: string; error?: string; children: React.ReactNode }) {
+function Field({ id, label, hint, error, children }: { id: string; label: string; hint?: string; error?: string; children: React.ReactNode }) {
   return (
     <div className="flex flex-col gap-2">
       <Label htmlFor={id}>{label}</Label>
       {children}
+      {hint && !error && <p className="text-xs text-muted-foreground">{hint}</p>}
       {error && (
         <p id={`${id}-error`} className="text-xs text-destructive" role="alert">
           {error}
@@ -65,7 +69,9 @@ export default function PropertyEditor({ params }: { params: Promise<{ id: strin
       setForm({
         name: found.name ?? '', slug: found.slug ?? '', builder: found.builder ?? '',
         location: found.location ?? '', address: found.address ?? '',
-        status: found.status ?? '', priceDisplay: found.priceDisplay ?? '',
+        area: found.area ?? '',
+        status: found.status ?? '', possession: found.possession ?? '',
+        priceDisplay: found.priceDisplay ?? '',
         areaDisplay: found.areaDisplay ?? '', bhkDisplay: found.bhkDisplay ?? '',
         category: found.category ?? 'Residential', listingType: found.listingType ?? 'Under Construction', featured: !!found.featured,
         overview: Array.isArray(found.overview) ? found.overview.join('\n') : '',
@@ -102,7 +108,9 @@ export default function PropertyEditor({ params }: { params: Promise<{ id: strin
     try {
       const payload = {
         name: form.name, slug: form.slug, builder: form.builder, location: form.location,
-        address: form.address, status: form.status, priceDisplay: form.priceDisplay,
+        address: form.address, area: form.area || null,
+        status: form.status.trim(), possession: form.possession.trim() || null,
+        priceDisplay: form.priceDisplay,
         areaDisplay: form.areaDisplay, bhkDisplay: form.bhkDisplay, category: form.category,
         listingType: form.listingType,
         featured: form.featured,
@@ -185,12 +193,16 @@ export default function PropertyEditor({ params }: { params: Promise<{ id: strin
           <Field id="f-address" label="Address">
             <Input id="f-address" value={form.address} onChange={(e) => set('address', e.target.value)} />
           </Field>
-          <Field id="f-status" label="Status">
+          <Field
+            id="f-status"
+            label="Status note"
+            hint="Optional. Extra detail shown on the project page only — it does not change the badge. Use Possession above for the handover date."
+          >
             <Input
               id="f-status"
               value={form.status}
               onChange={(e) => set('status', e.target.value)}
-              placeholder="Ready to Move / Under Construction"
+              placeholder="e.g. 13th slab completed, 14th in progress"
             />
           </Field>
           <Field id="f-price" label="Price display">
@@ -213,14 +225,38 @@ export default function PropertyEditor({ params }: { params: Promise<{ id: strin
               </SelectContent>
             </Select>
           </Field>
-          <Field id="f-listing-type" label="Listing type">
+          <Field id="f-listing-type" label="Availability" hint="Sets the badge visitors see on the project card.">
             <Select value={form.listingType} onValueChange={(v) => v && set('listingType', v)}>
               <SelectTrigger id="f-listing-type" className="w-full">
-                <SelectValue />
+                <SelectValue>
+                  {(v: string) => LISTING_TYPE_LABEL[v as ListingType] ?? v}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="Under Construction">Under Construction</SelectItem>
-                <SelectItem value="Resale">Resale</SelectItem>
+                {LISTING_TYPES.map((t) => (
+                  <SelectItem key={t} value={t}>{LISTING_TYPE_LABEL[t]}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </Field>
+          <Field id="f-possession" label="Possession" hint="Expected handover date. Leave as “Not set yet” if it is not confirmed.">
+            <Input
+              id="f-possession"
+              value={form.possession}
+              onChange={(e) => set('possession', e.target.value)}
+              placeholder="Not set yet"
+            />
+          </Field>
+          <Field id="f-area" label="Area" hint="Used to group projects in the website filters and menu.">
+            <Select value={form.area || 'none'} onValueChange={(v) => v && set('area', v === 'none' ? '' : v)}>
+              <SelectTrigger id="f-area" className="w-full">
+                <SelectValue placeholder="Not set" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="none">Not set</SelectItem>
+                {AREAS.map((a) => (
+                  <SelectItem key={a} value={a}>{a}</SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </Field>

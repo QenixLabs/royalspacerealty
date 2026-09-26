@@ -16,6 +16,7 @@ const PropertySchema = new Schema(
     builder: { type: String, required: true },
     location: { type: String, required: true },
     address: { type: String, required: true },
+    area: { type: String, index: true },
     rera: String,
     status: { type: String, required: true },
     possession: String,

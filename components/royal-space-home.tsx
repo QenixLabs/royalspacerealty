@@ -18,6 +18,7 @@ import {
 import Reveal from './reveal'
 import SiteHeader from './site-header'
 import SiteFooter, { CtaStrip } from './site-footer'
+import { ProjectBadge } from './project-badge'
 import type { Project } from '@/lib/projects'
 
 const heroSlides = [
@@ -196,7 +197,8 @@ export function RoyalSpaceHome({ featuredProjects }: { featuredProjects: Project
             <Reveal key={project.name} delay={(index % 3) * 90}>
               <article className="rs-card">
                 <div className="rs-card-img" style={{ backgroundImage: `url(${project.image})` }} role="img" aria-label={project.name}>
-                  <span className="rs-card-tag">FEATURED</span>
+                  <ProjectBadge listingType={project.listingType} />
+                  <span className="rs-card-tag rs-card-tag-alt">FEATURED</span>
                   <span className="rs-card-price">{project.price}</span>
                 </div>
                 <div className="rs-card-body">
@@ -206,8 +208,8 @@ export function RoyalSpaceHome({ featuredProjects }: { featuredProjects: Project
                   </p>
                   <div className="rs-card-specs">
                     <div>
-                      <span>AREA</span>
-                      <p>{project.area}</p>
+                      <span>CARPET AREA</span>
+                      <p>{project.carpetArea}</p>
                     </div>
                     <div>
                       <span>BEDROOM</span>

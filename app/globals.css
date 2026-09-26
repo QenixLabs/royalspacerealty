@@ -229,6 +229,9 @@
 .rs-card { background: #fff; border: 1px solid #eee; display: flex; flex-direction: column; }
 .rs-card-img { background-color: #e8e8e8; background-position: center; background-size: cover; height: 230px; position: relative; }
 .rs-card-tag { background: var(--rs-grad); color: #fff; font-size: 11px; font-weight: 700; left: 14px; letter-spacing: .08em; padding: 7px 12px; position: absolute; top: 14px; }
+.rs-card-tag-ready { background: linear-gradient(135deg, #0B6B4A 0%, #12A06F 100%); }
+.rs-card-tag-new { background: var(--rs-grad); }
+.rs-card-tag-alt { background: rgba(24, 12, 32, .72); left: auto; right: 14px; }
 .rs-card-price { background: linear-gradient(transparent, rgba(0,0,0,.65)); bottom: 0; color: #fff; font-size: 17px; font-weight: 700; left: 0; padding: 34px 14px 12px; position: absolute; right: 0; }
 .rs-card-body { padding: 18px 16px 20px; }
 .rs-card-body h3 { color: var(--maroon); font-size: 17px; font-weight: 700; margin: 0 0 8px; text-transform: capitalize; }

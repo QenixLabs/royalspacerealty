@@ -20,6 +20,7 @@ import Reveal from '@/components/reveal'
 import PropertyGallery from '@/components/property-gallery'
 import PropertyEnquire from '@/components/property-enquire'
 import { getPropertyDB, listPropertiesDB } from '@/lib/properties-db'
+import { LISTING_TYPE_LABEL } from '@/lib/listing'
 
 export const dynamic = 'force-dynamic'
 
@@ -50,12 +51,20 @@ export default async function PropertyDetailPage({ params }: PageProps) {
   const prevProperty = all[(idx - 1 + all.length) % all.length]
   const nextProperty = all[(idx + 1) % all.length]
 
+  const listingType = property.listingType ?? 'Under Construction'
+
   const facts = [
     { icon: Building2, label: 'Developer', value: property.builder },
     { icon: MapPin, label: 'Location', value: property.location },
     { icon: BedDouble, label: 'Configurations', value: property.bhkDisplay },
     { icon: Ruler, label: 'Carpet Area', value: property.areaDisplay },
-    { icon: CalendarClock, label: 'Possession', value: property.possession ?? property.status },
+    { icon: Building2, label: 'Availability', value: LISTING_TYPE_LABEL[listingType] },
+    ...(property.possession
+      ? [{ icon: CalendarClock, label: 'Possession', value: property.possession }]
+      : []),
+    ...(property.status
+      ? [{ icon: Check, label: 'Status note', value: property.status }]
+      : []),
     ...(property.rera
       ? [{ icon: ShieldCheck as typeof Building2, label: 'MahaRERA', value: property.rera }]
       : []),

@@ -14,10 +14,14 @@ import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from '@/components/ui/table'
 import { cn } from 'cn'
+import { LISTING_TYPES, LISTING_TYPE_LABEL, type ListingType } from '@/lib/listing'
 
-type Item = { _id: string; slug: string; name: string; location: string; priceDisplay: string; status: string; listingType?: string; featured?: boolean; updatedAt: string }
+type Item = { _id: string; slug: string; name: string; location: string; area?: string; priceDisplay: string; status: string; possession?: string; listingType?: string; featured?: boolean; updatedAt: string }
 
-const LISTING_TYPES = ['Under Construction', 'Resale'] as const
+const AVAILABILITY_STYLE: Record<string, string> = {
+  Resale: 'bg-emerald-100 text-emerald-800 hover:bg-emerald-100',
+  'Under Construction': 'border-amber-400 text-amber-700 hover:bg-transparent',
+}
 
 export default function PropertiesAdmin() {
   const [items, setItems] = useState<Item[]>([])
@@ -74,13 +78,15 @@ export default function PropertiesAdmin() {
               />
             </div>
             <Select value={type || 'all'} onValueChange={(v) => setType(v === 'all' ? '' : v ?? '')}>
-              <SelectTrigger aria-label="Filter by listing type" className="w-full sm:w-52">
-                <SelectValue placeholder="All types" />
+              <SelectTrigger aria-label="Filter by availability" className="w-full sm:w-56">
+                <SelectValue placeholder="All availability">
+                  {(v: string) => (v === 'all' ? 'All availability' : LISTING_TYPE_LABEL[v as ListingType] ?? v)}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All types</SelectItem>
+                <SelectItem value="all">All availability</SelectItem>
                 {LISTING_TYPES.map((t) => (
-                  <SelectItem key={t} value={t}>{t}</SelectItem>
+                  <SelectItem key={t} value={t}>{LISTING_TYPE_LABEL[t]}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -99,10 +105,10 @@ export default function PropertiesAdmin() {
                 <TableHeader>
                   <TableRow>
                     <TableHead>Name</TableHead>
+                    <TableHead>Area</TableHead>
                     <TableHead>Location</TableHead>
                     <TableHead>Price</TableHead>
-                    <TableHead>Type</TableHead>
-                    <TableHead>Status</TableHead>
+                    <TableHead>Availability</TableHead>
                     <TableHead className="w-[1%] whitespace-nowrap text-right">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -129,30 +135,18 @@ export default function PropertiesAdmin() {
                             )}
                           </span>
                         </TableCell>
-                        <TableCell>{p.location}</TableCell>
+                        <TableCell>{p.area || <span className="text-muted-foreground">Not set</span>}</TableCell>
+                        <TableCell className="max-w-[200px] truncate" title={p.location}>{p.location}</TableCell>
                         <TableCell>{p.priceDisplay}</TableCell>
                         <TableCell>
                           {p.listingType && (
                             <Badge
                               variant={p.listingType === 'Resale' ? 'secondary' : 'outline'}
-                              className={cn(
-                                p.listingType === 'Resale'
-                                  ? 'bg-emerald-100 text-emerald-800 hover:bg-emerald-100'
-                                  : 'border-amber-400 text-amber-700 hover:bg-transparent',
-                              )}
+                              className={AVAILABILITY_STYLE[p.listingType]}
                             >
-                              {p.listingType}
+                              {LISTING_TYPE_LABEL[p.listingType as ListingType] ?? p.listingType}
                             </Badge>
                           )}
-                        </TableCell>
-                        <TableCell className="max-w-[220px]">
-                          <Badge
-                            variant={p.status === 'Ready to Move' ? 'secondary' : 'outline'}
-                            className="block max-w-full truncate"
-                            title={p.status}
-                          >
-                            {p.status}
-                          </Badge>
                         </TableCell>
                         <TableCell className="w-[1%] whitespace-nowrap text-right">
                           <div className="flex justify-end gap-1">
