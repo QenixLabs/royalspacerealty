@@ -54,6 +54,7 @@ const navLinks: NavLink[] = [
 export function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [openDrop, setOpenDrop] = useState<string | null>(null)
+  const [openSub, setOpenSub] = useState<string | null>(null)
   const [query, setQuery] = useState('')
   const pathname = usePathname()
   const dropRefs = useRef<Map<string, HTMLDivElement | null>>(new Map())
@@ -71,16 +72,25 @@ export function SiteHeader() {
   useEffect(() => {
     setMenuOpen(false)
     setOpenDrop(null)
+    setOpenSub(null)
   }, [pathname])
 
   useEffect(() => {
-    if (!openDrop) return
+    if (!openDrop && !openSub) return
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setOpenDrop(null)
+      if (e.key === 'Escape') {
+        setOpenDrop(null)
+        setOpenSub(null)
+      }
     }
     const onClick = (e: MouseEvent) => {
-      const el = dropRefs.current.get(openDrop)
-      if (el && !el.contains(e.target as Node)) setOpenDrop(null)
+      const key = openSub ?? openDrop
+      if (!key) return
+      const el = dropRefs.current.get(key.split(':')[0])
+      if (el && !el.contains(e.target as Node)) {
+        setOpenDrop(null)
+        setOpenSub(null)
+      }
     }
     window.addEventListener('keydown', onKey)
     window.addEventListener('mousedown', onClick)
@@ -88,7 +98,7 @@ export function SiteHeader() {
       window.removeEventListener('keydown', onKey)
       window.removeEventListener('mousedown', onClick)
     }
-  }, [openDrop])
+  }, [openDrop, openSub])
 
   const isChildActive = (childHref: string) => {
     const current = pathname + query
@@ -112,14 +122,14 @@ export function SiteHeader() {
             <button
               type="button"
               className={`rs-nav-parent rs-nav-subparent ${isNavChildActive(child) ? 'active' : ''}`}
-              aria-expanded={openDrop === childKey}
+              aria-expanded={openSub === childKey}
               aria-haspopup="true"
-              onClick={() => setOpenDrop((v) => (v === childKey ? null : childKey))}
+              onClick={() => setOpenSub((v) => (v === childKey ? null : childKey))}
             >
               {child.label}
-              <ChevronDown size={14} aria-hidden="true" className={openDrop === childKey ? 'is-open' : ''} />
+              <ChevronDown size={14} aria-hidden="true" className={openSub === childKey ? 'is-open' : ''} />
             </button>
-            <div className={openDrop === childKey ? 'rs-nav-subdrop rs-nav-subdrop-open' : 'rs-nav-subdrop'} role="menu">
+            <div className={openSub === childKey ? 'rs-nav-subdrop rs-nav-subdrop-open' : 'rs-nav-subdrop'} role="menu">
               {renderChildren(child.children, childKey)}
             </div>
           </div>
@@ -133,9 +143,15 @@ export function SiteHeader() {
           className={isChildActive(child.href) ? 'active' : ''}
           onClick={() => {
             setOpenDrop(null)
+            setOpenSub(null)
             setMenuOpen(false)
             const q = child.href.includes('?') ? child.href.slice(child.href.indexOf('?')) : ''
             setQuery(q)
+            if (pathname + q !== child.href) {
+              window.location.href = child.href
+            } else {
+              window.location.reload()
+            }
           }}
         >
           {child.label}
@@ -182,7 +198,10 @@ export function SiteHeader() {
                   className={`rs-nav-parent ${isActive(link) ? 'active' : ''}`}
                   aria-expanded={openDrop === link.label}
                   aria-haspopup="true"
-                  onClick={() => setOpenDrop((v) => (v === link.label ? null : link.label))}
+                  onClick={() => {
+                    setOpenDrop((v) => (v === link.label ? null : link.label))
+                    setOpenSub(null)
+                  }}
                 >
                   {link.label}
                   <ChevronDown size={14} aria-hidden="true" className={openDrop === link.label ? 'is-open' : ''} />

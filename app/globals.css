@@ -554,7 +554,7 @@
 @media (max-width: 800px) {
   .rs-header { height: 72px; padding: 0 5vw; }
   .rs-brand-logo { height: 56px; }
-  .rs-nav { background: var(--dark); box-shadow: 0 10px 20px rgba(0,0,0,.08); display: none; flex-direction: column; gap: 0; left: 0; position: absolute; right: 0; top: 72px; }
+  .rs-nav { align-items: stretch; background: var(--dark); box-shadow: 0 10px 20px rgba(0,0,0,.08); display: none; flex-direction: column; gap: 0; left: 0; position: absolute; right: 0; top: 72px; }
   .rs-nav.rs-nav-open { display: flex; }
   .rs-nav a { border-top: 1px solid #333; color: #eee; padding: 15px 6vw; }
   .rs-nav-parent { border-top: 1px solid #333; color: #eee; justify-content: space-between; padding: 15px 6vw; text-align: left; width: 100%; }
@@ -567,8 +567,10 @@
   .rs-menu-btn { color: #fff; display: block; }
   .rs-social-rail { top: auto; bottom: 90px; }
   .rs-social-rail a { height: 40px; width: 40px; }
+  .rs-topbar { flex-wrap: wrap; gap: 6px 18px; justify-content: center; padding: 8px 5vw; }
+  .rs-topbar a { font-size: 13px; }
   .rs-hero { min-height: 420px; }
-  .rs-hero-copy { left: 6vw; max-width: none; transform: none; width: calc(100% - 6vw - 58px); }
+  .rs-hero-copy { left: 58px; max-width: none; transform: translateY(-50%); width: calc(100% - 116px); }
   .rs-hero-copy h1 { font-size: clamp(26px, 7.5vw, 40px); text-align: left; }
   @keyframes rs-fade-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
   .rs-search-row { gap: 14px; grid-template-columns: 1fr; margin-bottom: 14px; }
@@ -582,7 +584,7 @@
 }
 @media (max-width: 560px) {
   .rs-service-grid { grid-template-columns: 1fr; }
-  .rs-topbar { flex-wrap: wrap; gap: 10px 20px; }
+  .rs-topbar { gap: 6px 14px; }
 }
 
 /* Nav dropdown */
@@ -812,6 +814,23 @@
   .rs-nav-drop-open { display: flex; transform: none; }
   .rs-nav-drop a { border-radius: 0; border-top: 1px solid rgba(255,255,255,.06); color: #ccc !important; padding: 13px 6vw 13px calc(6vw + 18px); }
   .rs-nav-drop a:hover, .rs-nav-drop a.active { background: rgba(255,255,255,.06); color: #fff !important; }
+  .rs-nav-subdrop {
+    background: transparent;
+    border-radius: 0;
+    box-shadow: none;
+    display: none;
+    left: auto;
+    min-width: 0;
+    opacity: 1;
+    padding: 0;
+    pointer-events: auto;
+    position: static;
+    transform: none;
+    transition: none;
+  }
+  .rs-nav-subdrop-open { display: flex; transform: none; }
+  .rs-nav-subdrop a { border-radius: 0; border-top: 1px solid rgba(255,255,255,.06); color: #ccc !important; padding: 13px 6vw 13px calc(6vw + 36px); }
+  .rs-nav-subdrop a:hover, .rs-nav-subdrop a.active { background: rgba(255,255,255,.06); color: #fff !important; }
   .rs-founder-card { grid-template-columns: 1fr; }
   .rs-founder-photo { max-height: 420px; }
 }

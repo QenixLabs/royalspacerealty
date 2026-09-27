@@ -34,7 +34,7 @@ export default function RootLayout({
     <html lang="en">
       <body className="antialiased">
         {children}
-        <AsopalavLeadPopup />
+        {process.env.NODE_ENV === 'production' && <AsopalavLeadPopup />}
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>

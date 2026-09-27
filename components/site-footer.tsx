@@ -30,6 +30,12 @@ export function SiteFooter() {
             Maharashtra 400067
           </p>
           <p>Email: manoj@royalspacerealty.in</p>
+          <p>
+            Website:{' '}
+            <a href="https://royalspacerealty.in/" target="_blank" rel="noreferrer" className="!inline !mb-0">
+              royalspacerealty.in
+            </a>
+          </p>
           <p>Phone: +91 9867915101</p>
           <p>Maha RERA No. A51800018427</p>
         </div>

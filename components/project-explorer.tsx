@@ -118,9 +118,9 @@ export function ProjectExplorer({ projects }: ProjectExplorerProps) {
   return (
     <div>
       <div className="mb-10 border border-neutral-200 border-t-[3px] border-t-[var(--purple-700)] bg-white p-5 shadow-sm sm:p-6" role="search" aria-label="Filter projects">
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1fr_1fr_auto]">
+        <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-[1fr_1fr_1fr_1fr_auto]">
           <div className="flex flex-col gap-2">
-            <span className="inline-flex items-center gap-1.5 text-[11px] font-bold tracking-[0.14em] text-[var(--purple-700)] uppercase">
+            <span className="hidden items-center gap-1.5 text-[11px] font-bold tracking-[0.14em] text-[var(--purple-700)] uppercase sm:inline-flex">
               <MapPin className="size-3.5" aria-hidden="true" /> Area
             </span>
             <Select value={area} onValueChange={(v) => v && setArea(v)}>
@@ -144,7 +144,7 @@ export function ProjectExplorer({ projects }: ProjectExplorerProps) {
             </Select>
           </div>
           <div className="flex flex-col gap-2">
-            <span className="inline-flex items-center gap-1.5 text-[11px] font-bold tracking-[0.14em] text-[var(--purple-700)] uppercase">
+            <span className="hidden items-center gap-1.5 text-[11px] font-bold tracking-[0.14em] text-[var(--purple-700)] uppercase sm:inline-flex">
               <Home className="size-3.5" aria-hidden="true" /> Availability
             </span>
             <Select value={avail} onValueChange={(v) => v && setAvail(v as ListingType | 'all')}>
@@ -165,7 +165,7 @@ export function ProjectExplorer({ projects }: ProjectExplorerProps) {
             </Select>
           </div>
           <div className="flex flex-col gap-2">
-            <span className="inline-flex items-center gap-1.5 text-[11px] font-bold tracking-[0.14em] text-[var(--purple-700)] uppercase">
+            <span className="hidden items-center gap-1.5 text-[11px] font-bold tracking-[0.14em] text-[var(--purple-700)] uppercase sm:inline-flex">
               <BedDouble className="size-3.5" aria-hidden="true" /> BHK
             </span>
             <Select value={bhk} onValueChange={(v) => v && setBhk(v)}>
@@ -186,7 +186,7 @@ export function ProjectExplorer({ projects }: ProjectExplorerProps) {
             </Select>
           </div>
           <div className="flex flex-col gap-2">
-            <span className="inline-flex items-center gap-1.5 text-[11px] font-bold tracking-[0.14em] text-[var(--purple-700)] uppercase">
+            <span className="hidden items-center gap-1.5 text-[11px] font-bold tracking-[0.14em] text-[var(--purple-700)] uppercase sm:inline-flex">
               <Wallet className="size-3.5" aria-hidden="true" /> Budget
             </span>
             <Select value={budget} onValueChange={(v) => v && setBudget(v)}>
@@ -205,9 +205,9 @@ export function ProjectExplorer({ projects }: ProjectExplorerProps) {
               </SelectContent>
             </Select>
           </div>
-          <div className="flex items-end gap-2">
+          <div className="col-span-2 flex items-center gap-2 lg:col-span-1">
             <Badge
-              className="h-11 items-center gap-1.5 rounded-md border-0 bg-[image:var(--rs-grad)] px-4 text-sm font-bold tracking-wider whitespace-nowrap text-white uppercase shadow-sm"
+              className="h-11 flex-1 items-center justify-center gap-1.5 rounded-md border-0 bg-[image:var(--rs-grad)] px-4 text-sm font-bold tracking-wider whitespace-nowrap text-white uppercase shadow-sm sm:flex-none"
               aria-live="polite"
             >
               <SlidersHorizontal className="size-3.5" aria-hidden="true" />
@@ -217,7 +217,7 @@ export function ProjectExplorer({ projects }: ProjectExplorerProps) {
               <Button
                 type="button"
                 variant="outline"
-                className="h-11 gap-1.5 rounded-md border-0 bg-[image:var(--rs-grad)] px-4 text-sm font-bold tracking-wider whitespace-nowrap text-white uppercase shadow-sm transition-all duration-200 hover:bg-[image:var(--rs-grad-hover)] active:scale-[.97]"
+                className="h-11 flex-1 gap-1.5 rounded-md border-0 bg-[image:var(--rs-grad)] px-4 text-sm font-bold tracking-wider whitespace-nowrap text-white uppercase shadow-sm transition-all duration-200 hover:bg-[image:var(--rs-grad-hover)] active:scale-[.97] sm:flex-none"
                 onClick={reset}
               >
                 <RotateCcw className="size-3.5" aria-hidden="true" /> Reset
