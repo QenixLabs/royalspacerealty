@@ -15,6 +15,27 @@ export const metadata: Metadata = {
     ],
     apple: '/apple-icon.png',
   },
+  openGraph: {
+    title: 'Royal Space Realty | Real Estate Consultant in Mumbai | Residential | Commercial',
+    description: 'Royal Space Realty — trusted real estate consultant in Mumbai for residential and commercial properties. Buy, sell and rent with elite service.',
+    url: 'https://royalspacerealty.in',
+    siteName: 'Royal Space Realty',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'Royal Space Realty',
+      },
+    ],
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Royal Space Realty | Real Estate Consultant in Mumbai | Residential | Commercial',
+    description: 'Royal Space Realty — trusted real estate consultant in Mumbai for residential and commercial properties. Buy, sell and rent with elite service.',
+    images: ['/og-image.png'],
+  },
 }
 
 export const viewport: Viewport = {
